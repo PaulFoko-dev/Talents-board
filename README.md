@@ -1,28 +1,40 @@
 # Talents-board
 
-**Talents-board** est une plateforme web collaborative qui connecte des **étudiants en recherche d’opportunités professionnelles** (stage, alternance, CDD, CDI, etc.) avec des **entreprises en recherche de talents**.
+**Talents-board** est une plateforme web qui facilite la rencontre entre **jeunes talents** (étudiants, alternants, jeunes diplômés) et **entreprises** en recherche de compétences.  
 
-* Les étudiants peuvent créer des **profils et candidatures**, ajouter leurs compétences et leur CV, et postuler ou soumettre des candidatures spontanées.
-* Les entreprises peuvent publier des **opportunités** (tickets de recherche de talents), appliquer des filtres (compétences, type de contrat, niveau d’études, etc.) et consulter les profils pertinents.
+🔹 Les **étudiants** peuvent créer des **tickets de candidature** (stage, alternance, CDI, CDD…), renseigner leurs compétences, uploader leur CV, et soumettre des candidatures spontanées.  
+🔹 Les **entreprises** créent des **tickets de recherche de talents** pour définir un besoin précis (ex : développeur Angular pour un stage de 6 mois) et accèdent à une liste de candidats correspondant à leurs critères.  
 
----
+
 
 ## 📂 Structure du projet
 
-```
+
+
 project-root
-├── backend/              # Backend Spring Boot (API REST + Firebase)
-│   ├── pom.xml
-│   └── src/
-├── frontend/             # Frontend Angular (interface utilisateur)
+├── backend              # API REST (Spring Boot + Firebase)
+│   ├── src
+│   │   ├── main/java/com/talentsboard/backend
+│   │   │   ├── controller   # API Controllers (REST endpoints)
+│   │   │   ├── service      # Logique métier
+│   │   │   ├── model        # Modèles (Entities/DTO)
+│   │   │   └── repository   # Accès Firebase
+│   │   └── main/resources
+│   │       └── application.properties
+│   └── pom.xml
+├── frontend             # Application Angular
+│   ├── src/app
+│   │   ├── modules       # Modules fonctionnels (étudiants, entreprises, auth…)
+│   │   ├── components    # Composants Angular réutilisables
+│   │   ├── services      # Services Angular (API, auth, firebase…)
+│   │   ├── models        # Interfaces/Types partagés
+│   │   └── assets        # Ressources statiques (images, CSS, logos…)
+│   ├── angular.json
 │   ├── package.json
-│   └── src/
-├── docs/                 # Documentation projet
-├── scripts/              # Scripts d'installation et de configuration
-│   ├── setup_env_linux.sh
-│   └── setup_env_windows.ps1
-└── README.md             # Documentation principale
-```
+│   └── tsconfig.json
+└── docs                 # Documentation technique et fonctionnelle
+
+
 
 
 
@@ -30,46 +42,44 @@ project-root
 
 ### Backend
 
-* **Java 17**
-* **Spring Boot 3.3.x**
-* **Maven**
-* **Modules** : Spring Web, Spring Security, Firebase Admin SDK
-* API REST exposée sur `http://localhost:8080/api/...`
+- **Java 17**
+- **Spring Boot 3.3.x**
+- **Maven**
+- **Firebase Admin SDK**
+- Modules : Spring Web, Spring Validation
 
 ### Frontend
 
-* **Angular 17+**
-* **Bootstrap 5** (UI responsive)
-* **Axios** (communication API)
-* **Firebase JS SDK** (authentification et base de données temps réel)
-* **Node.js ≥ 22.12** + **npm**
+- **Angular 17+**
+- **Bootstrap 5** (UI)
+- **Axios** pour la communication API
+- **Firebase Web SDK** (auth, firestore, storage)
+- **Node.js ≥ 22.12**
+- **npm**
 
 ### Base de données
 
-* **Firebase** (Firestore + Authentication)
-* Avantages :
-
-  * Temps réel
-  * Auth simplifiée (Google, email, etc.)
-  * Pas besoin de gérer un serveur SQL
+- **Firebase Firestore** (NoSQL, hébergé, temps réel)
+- **Firebase Authentication** (authentification sécurisée)
+- **Firebase Storage** (gestion des CV et fichiers)
 
 
 
 ## 📝 Fonctionnalités principales
 
-### Pour les étudiants
+### Étudiants
 
-* Création d’un profil complet (infos, CV, compétences)
-* Création et gestion de candidatures (stage, alternance, CDI, etc.)
-* Soumission de candidatures spontanées aux entreprises
-* Suivi de l’état de ses candidatures
+- Créer un **ticket de candidature** (stage, alternance, CDI, etc.)
+- Déposer un **CV** et renseigner ses compétences
+- Rechercher des entreprises et postuler via **candidature spontanée**
+- Suivre ses candidatures
 
-### Pour les entreprises
+### Entreprises
 
-* Création d’**opportunités** (tickets de recherche de candidats)
-* Consultation et filtrage des candidatures reçues
-* Recherche de profils par compétences, type de contrat, études
-* Accès aux CV et informations clés des candidats
+- Créer des **tickets de recherche de talents** pour un poste précis
+- Définir des filtres (type de contrat, compétences, localisation…)
+- Parcourir les **profils candidats correspondants**
+- Consulter et télécharger les CV
 
 
 
@@ -77,12 +87,13 @@ project-root
 
 ### 1. Prérequis
 
-* Java 17
-* Maven
-* Node.js ≥ 22.12 + npm
-* Angular CLI
-* Git
-* Compte Firebase (avec Firestore + Authentication activés)
+- Java 17
+- Maven
+- Node.js ≥ 22.12
+- npm
+- Angular CLI
+- Git
+- Compte Firebase + fichier de configuration (`firebase-config.json` pour le backend et `environment.ts` pour le frontend)
 
 ### 2. Cloner le projet
 
@@ -91,32 +102,41 @@ git clone <REPO_URL>
 cd Talents-board/project-root
 ```
 
-### 3. Configuration Firebase
+### 3. Backend
 
-1. Créez un projet Firebase.
-2. Activez **Firestore** et **Authentication**.
-3. Téléchargez la clé d’admin (`serviceAccountKey.json`) pour le backend et placez-la dans :
+1. Configurer Firebase :
 
-```
-backend/src/main/resources/firebase/
-```
+   * Placer le fichier **`firebase-config.json`** (clé admin) dans `backend/src/main/resources/`.
 
-4. Configurez le frontend avec vos credentials Firebase (`frontend/src/environments/environment.ts`).
-
-
-
-### 4. Backend
+2. Lancer le backend :
 
 ```bash
 cd backend
 ./mvnw spring-boot:run
 ```
 
-API disponible sur : `http://localhost:8080/api/...`
+API disponible par défaut : `http://localhost:8080/api/...`
 
+### 4. Frontend
 
+1. Configurer Firebase dans **`frontend/src/environments/environment.ts`** :
 
-### 5. Frontend
+```ts
+export const environment = {
+  production: false,
+  firebase: {
+    apiKey: "<API_KEY>",
+    authDomain: "<PROJECT_ID>.firebaseapp.com",
+    projectId: "<PROJECT_ID>",
+    storageBucket: "<PROJECT_ID>.appspot.com",
+    messagingSenderId: "<SENDER_ID>",
+    appId: "<APP_ID>"
+  },
+  apiUrl: "http://localhost:8080/api"
+};
+```
+
+2. Installer les dépendances et lancer Angular :
 
 ```bash
 cd frontend
@@ -124,82 +144,51 @@ npm install
 ng serve
 ```
 
-Application Angular disponible sur : `http://localhost:4200`
+Frontend disponible par défaut : `http://localhost:4200`
 
 
 
-## ⚡ Bonnes pratiques de développement
+## ⚡ Bonnes pratiques pour le développement
 
-* Chaque développeur travaille sur une **branche dédiée** → `feature/<initiales>-<fonctionnalité>`
-* Les PR sont ouvertes vers `develop` et validées par le **propriétaire (owner)**
-* **Ne pas pousser** de fichiers sensibles (`.env`, `serviceAccountKey.json`)
-* Commit clair et structuré :
-
-  * `feat(frontend): ajout formulaire candidature`
-  * `fix(backend): correction API auth Firebase`
+* Chaque membre travaille sur une **branche dédiée** et ouvre une **pull request** vers `develop`
+* `main` = stable, `develop` = intégration des nouvelles features
+* **Commits clairs et fréquents** (`feat(frontend): ajout module ticket`)
+* **Ne jamais commiter les clés Firebase** (les mettre dans `.gitignore`)
+* Tests unitaires obligatoires avant PR
 
 
 
-## 📁 Structure détaillée des modules
+## 📁 Modules fonctionnels prévus
 
-### Frontend (Angular)
+### Frontend
 
-```
-frontend/src
-├── app/
-│   ├── core/            # Services globaux (auth, API, firebase.service.ts)
-│   ├── shared/          # Composants et modules réutilisables (UI, pipes, directives)
-│   ├── features/
-│   │   ├── student/     # Espace étudiant (profil, candidatures, candidatures spontanées)
-│   │   └── company/     # Espace entreprise (opportunités, recherche, gestion candidats)
-│   ├── app-routing.module.ts
-│   └── app.module.ts
-├── assets/              # Images, CSS global
-└── environments/        # Configurations (environment.ts, environment.prod.ts)
-```
+* `auth` : login / register étudiant et entreprise
+* `tickets` : gestion des tickets (création, recherche, filtrage)
+* `profile` : gestion du profil étudiant et entreprise
+* `dashboard` : vue entreprise (liste candidats) et vue étudiant (suivi candidatures)
 
-### Backend (Spring Boot)
+### Backend
 
-```
-backend/src/main/java/com/talentsboard
-├── controller/          # REST controllers
-├── service/             # Services métiers (Firebase, gestion étudiants/entreprises)
-├── repository/          # Interfaces de persistance (Firebase wrappers)
-├── model/               # Entités (Student, Company, Opportunity, Application)
-└── config/              # Config Spring + Firebase
-```
-
-### Docs / Scripts
-
-```
-docs/                   # Documentation technique et fonctionnelle
-scripts/                # Scripts d’installation (Linux, Windows)
-```
-
-
-
-## 🔗 Liens utiles
-
-* [Angular](https://angular.io/docs)
-* [Spring Boot](https://spring.io/projects/spring-boot)
-* [Firebase](https://firebase.google.com/docs)
-* [Bootstrap 5](https://getbootstrap.com/docs/5.0/getting-started/introduction/)
+* `controller` : REST endpoints (tickets, users, candidatures)
+* `service` : logique métier (filtrage, correspondance candidats-entreprises)
+* `repository` : accès Firebase (Firestore, Auth, Storage)
+* `model` : entités/DTO (User, Ticket, Candidature)
 
 
 
 ## 👨‍💻 Contribution
 
 1. Fork le projet
-2. Crée ta branche : `git checkout -b feature/<ma-fonctionnalité>`
-3. Commit clair et fréquent
-4. Push vers ta branche : `git push origin feature/<ma-fonctionnalité>`
-5. Ouvre une **Pull Request** vers `develop`
+2. Crée ta branche (`git checkout -b feature/ma-fonctionnalité`)
+3. Commits clairs et fréquents
+4. Push vers ta branche (`git push origin feature/ma-fonctionnalité`)
+5. Ouvre une Pull Request vers `develop`
 
 
 
 ## ⚠️ Notes importantes
 
-* ⚡ **Firebase remplace MySQL** → plus besoin de Docker MySQL.
-* 🔒 Ne jamais partager vos fichiers de credentials Firebase (`serviceAccountKey.json`).
-* 🚀 Le backend et le frontend doivent être synchronisés sur la même config Firebase.
-
+* ⚡ Remplacer MySQL → Firebase (Firestore, Auth, Storage)
+* 🔐 Ne jamais exposer les fichiers de config Firebase (`firebase-config.json`)
+* 🚀 Docker n’est plus nécessaire (Firebase est hébergé)
+* 👨‍💻 Toujours tester son code avant de pousser sur GitHub
