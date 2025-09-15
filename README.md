@@ -9,7 +9,7 @@
 
 ## 📂 Structure du projet
 
-
+```
 
 project-root
 ├── backend              # API REST (Spring Boot + Firebase)
@@ -34,7 +34,7 @@ project-root
 │   └── tsconfig.json
 └── docs                 # Documentation technique et fonctionnelle
 
-
+```
 
 
 
