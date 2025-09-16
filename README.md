@@ -157,6 +157,103 @@ Frontend disponible par défaut : `http://localhost:4200`
 * Tests unitaires obligatoires avant PR
 
 
+## 🛠️ Guide de travail pour les membres de l’équipe
+
+Ce guide explique **comment récupérer le projet**, travailler sur une fonctionnalité, et envoyer votre travail pour validation avant qu’il soit disponible pour les autres membres.
+
+
+
+### 1️⃣ Récupérer le projet
+
+1. **Cloner le dépôt GitHub sur votre machine locale** :
+
+```bash
+git clone <URL_DU_DEPOT>
+cd Talents-board/project-root
+```
+
+2. **Vérifier les branches disponibles** :
+
+```bash
+git branch -a
+```
+
+* La branche `main` contient la version stable.
+* La branche `develop` contient la version intégrée des nouvelles fonctionnalités.
+
+3. **Créer votre branche de travail depuis `develop`** :
+
+```bash
+git checkout develop
+git pull origin develop
+git checkout -b feature/<initiales>-<nom-fonctionnalité>
+```
+
+Exemple : `feature/pa-add-jobrequest` pour Pierre ajoutant la création d’un JobRequest.
+
+
+
+### 2️⃣ Travailler sur votre fonctionnalité
+
+* Effectuez vos modifications dans votre **branche personnelle**.
+* Commits fréquents et clairs :
+
+```bash
+git add .
+git commit -m "feat(frontend): ajout formulaire JobRequest"
+```
+
+* Si vous travaillez en binôme, vous pouvez partager la branche et pousser vos modifications sur GitHub.
+
+
+
+### 3️⃣ Mettre à jour votre branche avec les changements du reste de l’équipe
+
+Avant d’envoyer votre travail pour validation :
+
+```bash
+git checkout develop
+git pull origin develop
+git checkout feature/<votre-branche>
+git merge develop
+```
+
+* Résoudre tout conflit éventuel.
+* Tester que tout fonctionne correctement après la fusion.
+
+
+
+### 4️⃣ Envoyer votre travail pour validation (Pull Request)
+
+1. **Pousser votre branche sur GitHub** :
+
+```bash
+git push origin feature/<votre-branche>
+```
+
+2. **Créer une Pull Request (PR) depuis GitHub** :
+
+* Base : `develop`
+* Branche source : votre `feature/<votre-branche>`
+
+3. **Notifier le propriétaire (owner)** pour la vérification.
+
+* Le propriétaire fera la revue du code, vérifiera que tout fonctionne et validera la PR.
+
+
+
+### 5️⃣ Après validation
+
+* Une fois la PR approuvée, elle sera **mergée dans `develop`**.
+* Votre travail devient disponible pour les autres membres qui peuvent alors récupérer la mise à jour :
+
+```bash
+git checkout develop
+git pull origin develop
+```
+
+* Ensuite, vous pouvez créer une nouvelle branche pour une autre fonctionnalité.
+
 
 ## 📁 Modules fonctionnels prévus
 
