@@ -12,43 +12,27 @@
 ```
 
 project-root
-├── backend                      # API REST (Spring Boot + Firebase)
+├── backend              # API REST (Spring Boot + Firebase)
 │   ├── src
 │   │   ├── main/java/com/talentsboard/backend
-│   │   │   ├── config          # Configuration (Firebase, Security, etc.)
-│   │   │   ├── controller      # API Controllers (endpoints REST)
-│   │   │   ├── service         # Logique métier (auth, tickets, candidatures…)
-│   │   │   ├── model           # Modèles (Entities, DTOs, Enums)
-│   │   │   ├── repository      # Accès Firebase (Firestore/Storage)
-│   │   │   └── util            # Utils (ex: extraction de compétences PDF)
+│   │   │   ├── controller   # API Controllers (REST endpoints)
+│   │   │   ├── service      # Logique métier
+│   │   │   ├── model        # Modèles (Entities/DTO)
+│   │   │   └── repository   # Accès Firebase
 │   │   └── main/resources
-│   │       ├── application.properties   # Config Spring Boot
-│   │       └── firebase-service-account.json (IGNORÉ dans git)
+│   │       └── application.properties
 │   └── pom.xml
-│
-├── frontend                     # Application Angular
-│   ├── src
-│   │   ├── app
-│   │   │   ├── core            # Services globaux (auth, interceptors, guards…)
-│   │   │   ├── shared          # Composants/directives/pipes réutilisables
-│   │   │   ├── features        # Modules fonctionnels (auth, students, companies, tickets, search…)
-│   │   │   ├── models          # Interfaces / types partagés (User, Ticket, Application…)
-│   │   │   └── app.module.ts   # Module principal
-│   │   ├── assets
-│   │   │   ├── images          # Logos, images
-│   │   │   └── styles          # Styles globaux (Bootstrap overrides, SCSS…)
-│   │   ├── environments
-│   │   │   ├── environment.ts        # Config locale (IGNORÉ dans git)
-│   │   │   ├── environment.prod.ts   # Config production (IGNORÉ dans git)
-│   │   │   └── environment.example.ts # Modèle versionné (sans secrets)
-│   │   ├── index.html
-│   │   ├── main.ts
-│   │   └── styles.scss
+├── frontend             # Application Angular
+│   ├── src/app
+│   │   ├── modules       # Modules fonctionnels (étudiants, entreprises, auth…)
+│   │   ├── components    # Composants Angular réutilisables
+│   │   ├── services      # Services Angular (API, auth, firebase…)
+│   │   ├── models        # Interfaces/Types partagés
+│   │   └── assets        # Ressources statiques (images, CSS, logos…)
 │   ├── angular.json
 │   ├── package.json
 │   └── tsconfig.json
-├── .gitignore                   # Ignorer node_modules, build, firebase keys, env files
-└── README.md                    # Présentation du projet
+└── docs                 # Documentation technique et fonctionnelle
 
 ```
 
