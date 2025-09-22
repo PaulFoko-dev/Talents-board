@@ -1,9 +1,9 @@
 package com.talentsboard.backend.model;
 
 /**
- * Ticket
+ * Application
  * Représente un document stocké dans Firestore.
  */
-public class Ticket {
+public class Application {
     // TODO: Définir les attributs du modèle
 }
