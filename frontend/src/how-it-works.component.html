@@ -1,0 +1,11 @@
+<section class="how-section">
+  <h2>Comment ça marche ?</h2>
+  <div class="how-grid">
+    <div *ngFor="let step of steps; let i = index" class="how-card">
+      <div class="how-number">{{ step.num }}</div>
+      <div class="how-icon">{{ step.icon }}</div>
+      <h3>{{ step.title }}</h3>
+      <p>{{ step.description }}</p>
+    </div>
+  </div>
+</section>
