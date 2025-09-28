@@ -9,3 +9,4 @@ import { app } from "../../app.routes";
 export class Footer {
 
 }
+
