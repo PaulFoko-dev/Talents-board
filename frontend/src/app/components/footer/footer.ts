@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { app } from "../../app.routes";
 
 @Component({
   selector: 'app-footer',

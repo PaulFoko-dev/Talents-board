@@ -9,8 +9,4 @@ export const routes: Routes = [
   // Alias explicite vers la page d'accueil
   { path: 'home', component: HomeComponent },
   {path: 'contact', component: Contact}
-  { path: 'candidats', component: Candidats},
-    { path: 'entreprises', component: Entreprises},
-    { path: 'connexion', component: Connexion},
-    { path: 'inscription', component: Inscription}
 ];
