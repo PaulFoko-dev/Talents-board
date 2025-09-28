@@ -1,0 +1,68 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f7fa;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.temoignages-container {
+    max-width: 750px;
+    margin: 0 auto;
+  
+}
+
+/* Style du bloc de témoignage */
+.temoignages-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.temoignages-avis {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    font-style: italic;
+    position: relative;
+}
+
+.temoignages-auteur {
+    text-align: center;
+}
+
+ .auteur-photo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.auteur-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.temoignages-auteur strong {
+    display: block;
+    font-size: 1.1rem;
+    color: #2c3e50;
+}
+
+.temoignages-auteur span {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+}
+.temoignages-section {
+    max-width: 400px;
+}
