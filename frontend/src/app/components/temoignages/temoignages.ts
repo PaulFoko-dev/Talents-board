@@ -3,8 +3,8 @@ import { Component, Input } from '@angular/core';
 @Component({
   selector: 'app-temoignages',
   imports: [],
-  templateUrl: './temoignage.html',
-  styleUrl: './temoignage.scss'
+  templateUrl: './temoignages.html',
+  styleUrl: './temoignages.scss'
 })
 
 
