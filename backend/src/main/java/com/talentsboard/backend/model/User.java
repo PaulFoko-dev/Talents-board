@@ -15,6 +15,6 @@ public abstract class User {
     protected String email;                                 // Email unique
     protected String nom;                                   // Nom (Candidat) ou Raison sociale (Entreprise)
     protected UserType type;                                // Enum : CANDIDAT, ENTREPRISE, ADMIN
-    protected String description;                           // Présentation ou bio
+    protected String description;                           // Présentation ou bio          
     protected LocalDateTime dateInscription = LocalDateTime.now(); // Date d’inscription
 }
