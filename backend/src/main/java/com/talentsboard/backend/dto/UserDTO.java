@@ -1,4 +1,11 @@
 package com.talentsboard.backend.dto;
+import lombok.Data;
+import java.time.LocalDateTime;
+
+import com.google.cloud.Timestamp;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import com.google.cloud.Timestamp;
 import lombok.AllArgsConstructor;

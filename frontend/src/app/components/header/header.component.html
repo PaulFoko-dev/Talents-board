@@ -1,42 +1,28 @@
-<header class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
+<header class="site-header">
   <div class="container">
-    <!-- Logo -->
-    <a class="navbar-brand fw-bold text-primary" href="app.html">Talents-board</a>
-
-    <!-- Toggle mobile -->
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNav"
-      aria-controls="navbarNav"
-      aria-expanded="false"
-      aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+    <a class="brand" routerLink="/" (click)="closeMenu()" aria-label="Talents-board - Accueil">
+      <span class="logo" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2l2.6 5.3L20 8.4l-4 3.9.9 5.7L12 15.8 7.1 18l.9-5.7-4-3.9 5.4-1.1L12 2z" fill="#0d6efd"/>
+        </svg>
+      </span>
+      <span class="brand-text">Talents-board</span>
+    </a>
+    <button class="menu-toggle" type="button" aria-label="Ouvrir le menu" [attr.aria-expanded]="menuOpen" (click)="toggleMenu()">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
     </button>
-
-    <!-- Navigation -->
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto align-items-lg-center">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="app.html">Accueil</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Candidats</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Entreprises</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Connexion</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Inscription</a>
-        </li>
-        <li class="nav-item ms-lg-3">
-          <a class="btn btn-primary px-3" href="#">Commencer maintenant</a>
-        </li>
+    <nav class="nav" [class.open]="menuOpen">
+      <ul class="nav-list">
+        <li><a routerLink="/" routerLinkActive="active" (click)="closeMenu()">Accueil</a></li>
+        <li><a routerLink="/candidats" routerLinkActive="active" (click)="closeMenu()">Candidats</a></li>
+        <li><a routerLink="/entreprises" routerLinkActive="active" (click)="closeMenu()">Entreprises</a></li>
+        <li><a routerLink="/connexion" routerLinkActive="active" (click)="closeMenu()">Connexion</a></li>
+        <li><a routerLink="/contact" routerLinkActive="active">Inscription</a></li>
+        <li class="cta"><a class="btn-primary" routerLink="/inscription" (click)="closeMenu()">Commencer maintenant</a></li>
       </ul>
-    </div>
+    </nav>
   </div>
+  <div class="backdrop" *ngIf="menuOpen" (click)="closeMenu()" aria-hidden="true"></div>
 </header>

@@ -1,0 +1,16 @@
+<section class="how-section">
+  <h2>Comment ça marche ?</h2>
+  <div class="steps-container">
+    @for (step of steps; track step; let i = $index) {
+      <mat-card class="step-card">
+        <div class="step-number">{{ step.number }}</div>
+        <mat-icon class="step-icon">{{ step.icon }}</mat-icon>
+        <mat-card-title>{{ step.title }}</mat-card-title>
+        <mat-card-content><p>{{ step.description }}</p></mat-card-content>
+      </mat-card>
+      @if (i < steps.length - 1) {
+        <div class="arrow_div" ><span class="arrow">→</span></div>
+      }
+    }
+  </div>
+</section>
