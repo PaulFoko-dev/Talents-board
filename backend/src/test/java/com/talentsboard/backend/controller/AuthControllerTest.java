@@ -5,8 +5,6 @@ import com.talentsboard.backend.dto.AuthRequest;
 import com.talentsboard.backend.dto.AuthResponse;
 import com.talentsboard.backend.dto.RegisterCandidatRequest;
 import com.talentsboard.backend.dto.RegisterEntrepriseRequest;
-import com.talentsboard.backend.model.Candidat;
-import com.talentsboard.backend.model.Entreprise;
 import com.talentsboard.backend.model.User;
 import com.talentsboard.backend.service.AuthService;
 import org.junit.jupiter.api.Test;
@@ -46,10 +44,10 @@ class AuthControllerTest {
         request.setEmail("alice@example.com");
         request.setMotDePasse("password");
 
-        User savedUser = new Candidat();
+        User savedUser = new User();
         savedUser.setId("uid123");
         savedUser.setNom("Doe");
-        ((Candidat) savedUser).setPrenom("Alice");
+        savedUser.setPrenom("Alice");
         savedUser.setEmail("alice@example.com");
 
         when(authService.register(any(User.class), eq("password")))
@@ -74,13 +72,13 @@ class AuthControllerTest {
         request.setLocalisation("Paris");
         request.setSiteWeb("https://techcorp.com");
 
-        User savedUser = new Entreprise();
+        User savedUser = new User();
         savedUser.setId("uid456");
         savedUser.setNom("TechCorp");
         savedUser.setEmail("contact@techcorp.com");
-        ((Entreprise) savedUser).setSecteur("IT");
-        ((Entreprise) savedUser).setLocalisation("Paris");
-        ((Entreprise) savedUser).setSiteWeb("https://techcorp.com");
+        savedUser.setSecteur("IT");
+        savedUser.setLocalisation("Paris");
+        savedUser.setSiteWeb("https://techcorp.com");
 
         when(authService.register(any(User.class), eq("securepwd")))
                 .thenReturn(savedUser);

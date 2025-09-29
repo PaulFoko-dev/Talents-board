@@ -1,20 +1,28 @@
 package com.talentsboard.backend.model;
 
+import com.google.cloud.Timestamp;
 import lombok.Data;
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 /**
- * Classe abstraite représentant un utilisateur générique.
- * - Héritée par Candidat et Entreprise.
- * - Contient les informations communes.
+ * Entité utilisateur centralisée (persistée dans Firestore).
+ * - Un seul modèle pour Candidat/Entreprise/ADMIN via le champ `type`.
+ * - Champs spécifiques laissés optionnels (peuvent être null).
  */
 @Data
-public abstract class User {
-    protected String id = UUID.randomUUID().toString();     // UID Firebase (sera remplacé après inscription)
-    protected String email;                                 // Email unique
-    protected String nom;                                   // Nom (Candidat) ou Raison sociale (Entreprise)
-    protected UserType type;                                // Enum : CANDIDAT, ENTREPRISE, ADMIN
-    protected String description;                           // Présentation ou bio          
-    protected LocalDateTime dateInscription = LocalDateTime.now(); // Date d’inscription
+public class User {
+    private String id;               // UID Firebase (ou UUID si non encore créé)
+    private String email;
+    private String nom;              // pour candidat = nom, pour entreprise = raison sociale
+    private UserType type;
+    private String description;
+
+    // Champs spécifiques candidat
+    private String prenom;
+
+    // Champs spécifiques entreprise
+    private String secteur;
+    private String localisation;
+    private String siteWeb;
+
+    private Timestamp dateInscription = Timestamp.now();
 }
