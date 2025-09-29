@@ -1,18 +1,19 @@
 package com.talentsboard.backend.controller;
 
 import com.talentsboard.backend.dto.*;
-import com.talentsboard.backend.model.Candidat;
-import com.talentsboard.backend.model.Entreprise;
+import com.talentsboard.backend.mapper.UserMapper;
 import com.talentsboard.backend.model.User;
+import com.talentsboard.backend.model.UserType;
 import com.talentsboard.backend.service.AuthService;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * Controller REST pour l’authentification et l’inscription.
- * Toutes les réponses sont formatées avec ApiResponse<T>.
+ * Endpoints Auth :
+ * - /register/candidat
+ * - /register/entreprise
+ * - /login (email+password)
  */
 @RestController
 @RequestMapping("/api/auth")
@@ -20,58 +21,37 @@ public class AuthController {
 
     private final AuthService authService;
 
-    public AuthController(AuthService authService) {
-        this.authService = authService;
-    }
+    public AuthController(AuthService authService) { this.authService = authService; }
 
-    /**
-     * Endpoint pour inscrire un candidat.
-     * Exemple :
-     * curl -X POST http://localhost:8080/api/auth/register/candidat \
-     *   -H "Content-Type: application/json" \
-     *   -d '{"nom":"Doe","prenom":"John","email":"john@example.com","motDePasse":"password"}'
-     */
     @PostMapping("/register/candidat")
-    public ResponseEntity<ApiResponse<User>> registerCandidat(@RequestBody @Valid RegisterCandidatRequest request) throws Exception {
-        Candidat candidat = new Candidat();
-        candidat.setNom(request.getNom());
-        candidat.setPrenom(request.getPrenom());
-        candidat.setEmail(request.getEmail());
+    public ResponseEntity<ApiResponse<UserDTO>> registerCandidat(@RequestBody @Valid RegisterCandidatRequest req) throws Exception {
+        User u = new User();
+        u.setNom(req.getNom());
+        u.setPrenom(req.getPrenom());
+        u.setEmail(req.getEmail());
+        u.setType(UserType.CANDIDAT);
 
-        User newUser = authService.register(candidat, request.getMotDePasse());
-        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK.value(), "Inscription réussie", newUser));
+        User saved = authService.register(u, req.getMotDePasse());
+        return ResponseEntity.ok(new ApiResponse<>(200, "Inscription réussie", UserMapper.toDTO(saved)));
     }
 
-    /**
-     * Endpoint pour inscrire une entreprise.
-     * Exemple :
-     * curl -X POST http://localhost:8080/api/auth/register/entreprise \
-     *   -H "Content-Type: application/json" \
-     *   -d '{"nom":"TechCorp","email":"contact@techcorp.com","motDePasse":"securepwd","secteur":"IT","localisation":"Paris","siteWeb":"https://techcorp.com"}'
-     */
     @PostMapping("/register/entreprise")
-    public ResponseEntity<ApiResponse<User>> registerEntreprise(@RequestBody @Valid RegisterEntrepriseRequest request) throws Exception {
-        Entreprise entreprise = new Entreprise();
-        entreprise.setNom(request.getNom());
-        entreprise.setEmail(request.getEmail());
-        entreprise.setSecteur(request.getSecteur());
-        entreprise.setLocalisation(request.getLocalisation());
-        entreprise.setSiteWeb(request.getSiteWeb());
+    public ResponseEntity<ApiResponse<UserDTO>> registerEntreprise(@RequestBody @Valid RegisterEntrepriseRequest req) throws Exception {
+        User u = new User();
+        u.setNom(req.getNom());
+        u.setEmail(req.getEmail());
+        u.setSecteur(req.getSecteur());
+        u.setLocalisation(req.getLocalisation());
+        u.setSiteWeb(req.getSiteWeb());
+        u.setType(UserType.ENTREPRISE);
 
-        User newUser = authService.register(entreprise, request.getMotDePasse());
-        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK.value(), "Inscription réussie", newUser));
+        User saved = authService.register(u, req.getMotDePasse());
+        return ResponseEntity.ok(new ApiResponse<>(200, "Inscription entreprise réussie", UserMapper.toDTO(saved)));
     }
 
-    /**
-     * Endpoint pour se connecter.
-     * Exemple :
-     * curl -X POST http://localhost:8080/api/auth/login \
-     *   -H "Content-Type: application/json" \
-     *   -d '{"email":"john@example.com","motDePasse":"password"}'
-     */
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<AuthResponse>> login(@RequestBody @Valid AuthRequest request) throws Exception {
-        AuthResponse response = authService.login(request);
-        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK.value(), "Connexion réussie", response));
+    public ResponseEntity<ApiResponse<AuthResponse>> login(@RequestBody @Valid AuthRequest req) {
+        AuthResponse resp = authService.login(req);
+        return ResponseEntity.ok(new ApiResponse<>(200, "Connexion réussie", resp));
     }
 }

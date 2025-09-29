@@ -4,11 +4,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserRecord;
 import com.talentsboard.backend.dto.AuthRequest;
 import com.talentsboard.backend.dto.AuthResponse;
-import com.talentsboard.backend.model.Candidat;
 import com.talentsboard.backend.model.User;
+import com.talentsboard.backend.repository.UserRepository;
+import com.talentsboard.backend.repository.UserRepositoryImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -23,14 +25,15 @@ class AuthServiceTest {
 
     @BeforeEach
     void setUp() {
-        authService = new AuthService();
+        UserService userService = Mockito.mock(UserService.class);
+        authService = new AuthService(userService);
     }
 
     @Test
     void testRegisterUser() throws Exception {
-        User user = new Candidat();
+        User user = new User();
         user.setNom("Doe");
-        ((Candidat) user).setPrenom("Alice");
+        user.setPrenom("Alice");
         user.setEmail("alice@example.com");
 
         UserRecord fakeRecord = mock(UserRecord.class);

@@ -38,6 +38,7 @@ build/
 # Fichiers config Firebase
 /backend/src/main/resources/firebase-service-account.json
 
+/backend/src/main/java/com/talentsboard/backend/util/ApiKey.java
 # =====================
 # Frontend (Angular/Node)
 # =====================
