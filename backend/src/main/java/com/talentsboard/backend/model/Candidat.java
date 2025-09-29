@@ -13,7 +13,8 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class Candidat extends User {
     private String prenom; // Prénom du candidat
-
+    private String cvUrl; // URL du CV (Candidat) ou fiche de poste
+    private String[] competences;
     public Candidat() {
         this.type = UserType.CANDIDAT;
     }
