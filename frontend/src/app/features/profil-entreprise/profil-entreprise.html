@@ -1,0 +1,28 @@
+<mat-sidenav-container class="company-profile-container">
+    <mat-sidenav mode="side" opened>
+      <app-sidebar-nav [userType]="'entreprise'"></app-sidebar-nav>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <div class="profile-content">
+        <h1>Profil de l'entreprise</h1>
+        <mat-card class="company-card">
+          <div class="logo-container">
+            <img *ngIf="company.logo" [src]="company.logo" alt="{{ company.name }} logo" class="company-logo">
+          </div>
+          <h2>{{ company.name }}</h2>
+          <div class="description">
+            <h3>Description des activités</h3>
+            <p>{{ company.description }}</p>
+          </div>
+          <div class="contact-info">
+            <h3>Informations de contact</h3>
+            <p><mat-icon>email</mat-icon> {{ company.contact.email }}</p>
+            <p><mat-icon>phone</mat-icon> {{ company.contact.phone }}</p>
+            <p><mat-icon>location_on</mat-icon> {{ company.contact.address }}</p>
+            <p><mat-icon>language</mat-icon> <a href="http://{{ company.contact.website }}" target="_blank">{{ company.contact.website }}</a></p>
+          </div>
+        </mat-card>
+        <button mat-stroked-button color="primary" (click)="editProfile()">Éditer le profil</button>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
