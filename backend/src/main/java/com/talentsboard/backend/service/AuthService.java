@@ -2,6 +2,7 @@ package com.talentsboard.backend.service;
 
 import com.google.cloud.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseToken;
 import com.google.firebase.auth.UserRecord;
 import com.google.firebase.cloud.FirestoreClient;
 import com.talentsboard.backend.config.FirebaseTokenExchange;
@@ -153,6 +154,10 @@ public class AuthService {
         existing.setNom(updated.getNom() != null ? updated.getNom() : existing.getNom());
         existing.setDescription(updated.getDescription() != null ? updated.getDescription() : existing.getDescription());
         existing.setPrenom(updated.getPrenom() != null ? updated.getPrenom() : existing.getPrenom());
+        existing.setCompetences(updated.getCompetences() != null ? updated.getCompetences() : existing.getCompetences());
+        existing.setCv(updated.getCv() != null ? updated.getCv() : existing.getCv());
+        existing.setPhotoProfil(updated.getPhotoProfil() != null ? updated.getPhotoProfil() : existing.getPhotoProfil());
+        existing.setLogo(updated.getLogo() != null ? updated.getLogo() : existing.getLogo());
         existing.setSecteur(updated.getSecteur() != null ? updated.getSecteur() : existing.getSecteur());
         existing.setLocalisation(updated.getLocalisation() != null ? updated.getLocalisation() : existing.getLocalisation());
         existing.setSiteWeb(updated.getSiteWeb() != null ? updated.getSiteWeb() : existing.getSiteWeb());
@@ -211,5 +216,13 @@ public class AuthService {
         } catch (Exception e) {
             throw new RuntimeException("Erreur création ADMIN : " + e.getMessage(), e);
         }
+    }
+    /**
+     * Vérifie un idToken (JWT) et retourne le uid.
+     * Lance une exception si le token est invalide/expiré.
+     */
+    public String verifyTokenAndGetUid(String idToken) throws Exception {
+        FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(idToken);
+        return decodedToken.getUid();
     }
 }
