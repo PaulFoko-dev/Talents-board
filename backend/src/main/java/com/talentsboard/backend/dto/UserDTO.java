@@ -29,8 +29,12 @@ public class UserDTO {
 
     // candidat
     private String prenom;
+    private String competences;
+    private String cv;           // URL du CV
+    private String photoProfil;
 
     // entreprise
+    private String logo;
     private String secteur;
     private String localisation;
     private String siteWeb;

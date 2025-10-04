@@ -18,8 +18,12 @@ public class User {
 
     // Champs spécifiques candidat
     private String prenom;
+    private String competences;
+    private String cv;           // URL du CV
+    private String photoProfil;
 
     // Champs spécifiques entreprise
+    private String logo;
     private String secteur;
     private String localisation;
     private String siteWeb;
