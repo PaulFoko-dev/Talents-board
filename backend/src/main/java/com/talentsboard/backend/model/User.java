@@ -25,4 +25,5 @@ public class User {
     private String siteWeb;
 
     private Timestamp dateInscription = Timestamp.now();
+    private String cvPath;
 }

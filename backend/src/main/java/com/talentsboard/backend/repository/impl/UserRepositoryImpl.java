@@ -1,4 +1,4 @@
-package com.talentsboard.backend.repository;
+package com.talentsboard.backend.repository.impl;
 
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
@@ -6,6 +6,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.cloud.FirestoreClient;
 import com.talentsboard.backend.model.User;
+import com.talentsboard.backend.repository.UserRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

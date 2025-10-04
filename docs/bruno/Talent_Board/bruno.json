@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "Talent_Board",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

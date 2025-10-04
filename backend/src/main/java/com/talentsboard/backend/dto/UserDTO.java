@@ -37,4 +37,5 @@ public class UserDTO {
 
     private String dateInscription;
 
+    private String cvPath;
 }

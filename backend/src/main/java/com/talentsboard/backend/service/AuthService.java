@@ -184,8 +184,8 @@ public class AuthService {
             if (!exists) {
                 // Création manuelle du compte ADMIN
                 UserRecord.CreateRequest createRequest = new UserRecord.CreateRequest()
-                        .setEmail("admin@talentsboard.com")
-                        .setPassword("ChangeThisPassword123!") // ⚠️ à changer immédiatement
+                        .setEmail("admin@mail.com")
+                        .setPassword("123")
                         .setDisplayName("Default Admin");
 
                 UserRecord userRecord = FirebaseAuth.getInstance().createUser(createRequest);
