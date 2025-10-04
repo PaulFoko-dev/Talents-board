@@ -26,6 +26,7 @@ public final class UserMapper {
         dto.setSecteur(user.getSecteur());
         dto.setLocalisation(user.getLocalisation());
         dto.setSiteWeb(user.getSiteWeb());
+        dto.setCvPath(user.getCvPath());
         return dto;
     }
 

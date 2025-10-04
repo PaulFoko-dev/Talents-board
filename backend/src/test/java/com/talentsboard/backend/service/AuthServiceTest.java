@@ -5,8 +5,6 @@ import com.google.firebase.auth.UserRecord;
 import com.talentsboard.backend.dto.AuthRequest;
 import com.talentsboard.backend.dto.AuthResponse;
 import com.talentsboard.backend.model.User;
-import com.talentsboard.backend.repository.UserRepository;
-import com.talentsboard.backend.repository.UserRepositoryImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
