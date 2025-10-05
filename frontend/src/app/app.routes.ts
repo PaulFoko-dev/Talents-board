@@ -1,16 +1,14 @@
 
 import { Routes } from '@angular/router';
 import { HomeComponent } from './View/home/home.component';
-import { Contact } from './View/contact/contact';
+import { ProfileComponent } from './View/profile/profile.component';
+import { HeaderComponent } from './components/header/header.component';
+import { FooterComponent } from './components/footer/footer.component';
 
 export const routes: Routes = [
   // Route racine vers la page d'accueil
-  { path: '', component: HomeComponent, pathMatch: 'full' },
+  { path: '', component: ProfileComponent, pathMatch: 'full' },
   // Alias explicite vers la page d'accueil
   { path: 'home', component: HomeComponent },
-  {path: 'contact', component: Contact}
-  { path: 'candidats', component: Candidats},
-    { path: 'entreprises', component: Entreprises},
-    { path: 'connexion', component: Connexion},
-    { path: 'inscription', component: Inscription}
+    { path: 'profile', component: ProfileComponent }
 ];

@@ -1,0 +1,89 @@
+<div class="container-fluid mt-4">
+  <div class="row">
+    <!-- Sidebar -->
+    <div class="col-md-3">
+      <h5 class="mb-3">Dashboard</h5>
+      <nav class="nav flex-column sidebar">
+        <a class="nav-link active" href="#"><i class="bi bi-person"></i> Profil</a>
+        <a class="nav-link" href="#"><i class="bi bi-ticket"></i> Mes tickets</a>
+        <a class="nav-link" href="#"><i class="bi bi-briefcase"></i> Opportunités</a>
+        <a class="nav-link" href="#"><i class="bi bi-file-earmark-text"></i> Candidatures</a>
+        <a class="nav-link" href="#">
+          <i class="bi bi-bell"></i> Notifications 
+          <span class="badge bg-primary">3</span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- Contenu principal -->
+    <div class="col-md-9">
+      <div class="card p-4 mb-4">
+        <h2>Mon Profil</h2>
+        <p>Gérez vos informations personnelles et vos compétences.</p>
+
+        <!-- Infos -->
+        <div class="d-flex align-items-center mb-4">
+          <img src="assets/image/Paul.jpeg" class="rounded-circle me-3" alt="Profile picture" style="width: 100px; height: 100px;">
+          <div>
+            <h4>{{ user.name }}</h4>
+            <p class="mb-0">{{ user.job }}</p>
+            <p class="text-muted">{{ user.location }}</p>
+          </div>
+        </div>
+
+        <!-- Coordonnées -->
+        <h4>Coordonnées</h4>
+        <div class="row mb-4">
+          <div class="col-md-6"><strong>Email :</strong> {{ user.email }}</div>
+          <div class="col-md-6"><strong>Téléphone :</strong> {{ user.phone }}</div>
+        </div>
+
+        <!-- Compétences -->
+        <h4>Compétences</h4>
+        <div class="mb-4">
+          <span *ngFor="let skill of user.skills" class="badge skill-pill">{{ skill }}</span>
+        </div>
+
+        <!-- CV -->
+        <h4>Mon CV</h4>
+        <div class="mb-3">
+          <button class="btn btn-outline-secondary me-2">
+            <i class="bi bi-file-earmark-pdf"></i> Consulter mon CV (PDF)
+          </button>
+          <button class="btn btn-primary">Mettre à jour mon profil</button>
+        </div>
+      </div>
+
+      <!-- Analyse du CV -->
+      <div class="card p-4 mb-4">
+        <h5>Analyse automatique du CV</h5>
+        <p class="text-muted">Ton CV a été analysé : voici quelques suggestions pour renforcer ton profil.</p>
+        <ul>
+          <li>Ajouter la compétence <strong>Docker</strong></li>
+          <li>Détailler tes projets <strong>GitHub</strong></li>
+          <li>Mettre à jour ton CV (PDF)</li>
+        </ul>
+      </div>
+
+      <!-- Score de profil -->
+      <div class="card p-4 mb-4">
+        <h5>Score de profil</h5>
+        <div class="progress mb-2">
+          <div class="progress-bar bg-success" role="progressbar" style="width: 80%">80%</div>
+        </div>
+        <p class="text-muted">Ajoute tes expériences pour booster ton profil.</p>
+      </div>
+
+      <!-- Suggestions IA -->
+      <div class="card p-4">
+        <h5>Suggestions IA</h5>
+        <ul>
+          <li>Ajoute tes soft skills (communication, gestion de projet...)</li>
+          <li>Relie ton profil à <strong>LinkedIn</strong> pour augmenter ta visibilité</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>
