@@ -109,8 +109,9 @@ public class AuthService {
 
             String idToken = (String) resp.getBody().get("idToken");
             String uid = (String) resp.getBody().get("localId");
+            String typeUser = userService.getUserById(uid).getType().name();
 
-            return new AuthResponse(idToken, uid);
+            return new AuthResponse(idToken, uid, typeUser);
         } catch (org.springframework.web.client.HttpClientErrorException e) {
             throw new RuntimeException("Identifiants invalides");
         } catch (Exception e) {

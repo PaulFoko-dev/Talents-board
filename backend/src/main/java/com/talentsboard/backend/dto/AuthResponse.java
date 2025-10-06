@@ -11,4 +11,5 @@ import lombok.Data;
 public class AuthResponse {
     private String token;   // JWT Firebase ou custom
     private String userId;  // UID utilisateur
+    private String typeUser;
 }
