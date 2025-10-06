@@ -1,4 +1,11 @@
 import { Component } from '@angular/core';
+<<<<<<< HEAD
+import { FooterComponent } from "../components/footer/footer.component";
+
+@Component({
+  selector: 'app-connexion',
+  imports: [FooterComponent],
+=======
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -9,6 +16,7 @@ import { AuthService } from '../core/services/auth.service';
   selector: 'app-connexion',
   standalone: true,
   imports: [CommonModule, FormsModule],
+>>>>>>> develop
   templateUrl: './connexion.html',
   styleUrl: './connexion.scss'
 })
