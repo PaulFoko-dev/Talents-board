@@ -4,6 +4,7 @@ import { HomeComponent } from './View/home/home.component';
 import { ProfileComponent } from './View/profile/profile.component';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { Connexion } from './connexion/connexion';
 
 export const routes: Routes = [
   // Route racine vers la page d'accueil

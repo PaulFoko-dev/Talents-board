@@ -35,7 +35,7 @@
     "@fortawesome/fontawesome-free": "^7.1.0",
     "@fortawesome/free-brands-svg-icons": "^7.1.0",
     "@types/axios": "^0.9.36",
-    "axios": "^1.12.1",
+    "axios": "^1.12.2",
     "bootstrap": "^5.3.8",
     "firebase": "^11.10.0",
     "pdfjs-dist": "^5.4.149",
