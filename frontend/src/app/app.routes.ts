@@ -9,7 +9,9 @@ import { OpportuniteComponent } from './View/opportunite/opportunite.component';
 import { LayoutComponent } from './layout/layout.component';
 import { Inscription } from './inscription/inscription';
 import { TicketCreation } from './View/ticketCandidat/ticketCreation/ticketCreation';
-import { TicketCandidat } from './View/ticketCandidat/ticketCandidat';
+import { TicketCandidat } from './View/ticketCandidat/ticketCandidat';import { TicketCandidat } from './View/ticketCandidat/ticketCandidat';
+import { TicketCreation } from './View/ticketCandidat/ticketCreation/ticketCreation';
+
 export const routes: Routes = [
   // Route racine vers la page d'accueil
   { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -19,5 +21,7 @@ export const routes: Routes = [
   { path: 'inscription', component: Inscription },
   { path: 'connexion', component: Connexion },
   { path: 'header', component: HeaderComponent },
-  { path: 'footer', component: FooterComponent }
+  { path: 'footer', component: FooterComponent },
+  { path: 'ticketCreation', component: TicketCreation},
+  { path: 'ticketCandidat', component: TicketCandidat }
 ];
