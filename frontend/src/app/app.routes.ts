@@ -5,6 +5,8 @@ import { ProfileComponent } from './View/profile/profile.component';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { Connexion } from './connexion/connexion';
+import { TicketCandidat } from './View/ticketCandidat/ticketCandidat';
+import { TicketCreation } from './View/ticketCandidat/ticketCreation/ticketCreation';
 
 export const routes: Routes = [
   // Route racine vers la page d'accueil
@@ -15,5 +17,7 @@ export const routes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: 'connexion', component: Connexion },
   { path: 'header', component: HeaderComponent },
-  { path: 'footer', component: FooterComponent }
+  { path: 'footer', component: FooterComponent },
+  { path: 'ticketCreation', component: TicketCreation},
+  { path: 'ticketCandidat', component: TicketCandidat }
 ];
