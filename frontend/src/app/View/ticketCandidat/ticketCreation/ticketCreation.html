@@ -1,0 +1,83 @@
+<div class="form-container">
+  <header class="form-header">
+    <h1>Créer un nouveau ticket candidat</h1>
+    <p>Remplissez les informations ci-dessous pour créer votre demande d'opportunités.</p>
+  </header>
+
+  <form [formGroup]="ticketForm" (ngSubmit)="onSubmit()" novalidate>
+    
+    <div class="form-group">
+      <label for="title">Titre du profil / Poste recherché</label>
+      <input type="text" id="title" formControlName="title" class="form-control" [ngClass]="{ 'is-invalid': submitted && ticketForm.get('title')?.errors }">
+      <div *ngIf="submitted && ticketForm.get('title')?.errors" class="invalid-feedback">
+        <div *ngIf="ticketForm.get('title')?.hasError('required')">Le titre est obligatoire.</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="localisation">Localisation souhaitée</label>
+      <input type="text" id="localisation" formControlName="localisation" class="form-control" placeholder="Ex: Paris, Lyon, Télétravail...">
+    </div>
+
+    <div class="form-group">
+      <label for="domaine">Domaine d'activité</label>
+      <select id="domaine" formControlName="domaine" class="form-control">
+        <option value="" disabled>Sélectionnez un domaine</option>
+        <option *ngFor="let domaine of domaines" [value]="domaine">{{ domaine }}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="niveauExperience">Niveau d'expérience</label>
+      <select id="niveauExperience" formControlName="niveauExperience" class="form-control">
+        <option value="" disabled>Sélectionnez un niveau</option>
+        <option *ngFor="let niveau of niveauxExperience" [value]="niveau">{{ niveau }}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="availability">Disponibilité</label>
+      <select id="availability" formControlName="availability" class="form-control">
+        <option value="" disabled>Sélectionnez votre disponibilité</option>
+        <option *ngFor="let dispo of disponibilites" [value]="dispo">{{ dispo }}</option>
+      </select>
+    </div>
+    
+    <fieldset class="form-group-fieldset">
+      <legend>Attentes salariales (brut annuel en €)</legend>
+      <div class="fieldset-content">
+        <div class="form-group">
+          <label for="salaireMinExpectation">Minimum</label>
+          <input type="number" id="salaireMinExpectation" formControlName="salaireMinExpectation" class="form-control" placeholder="45000">
+        </div>
+        <div class="form-group">
+          <label for="salaireMaxExpectation">Maximum</label>
+          <input type="number" id="salaireMaxExpectation" formControlName="salaireMaxExpectation" class="form-control" placeholder="55000">
+        </div>
+      </div>
+    </fieldset>
+
+    <div class="form-group form-group-checkbox">
+        <input type="checkbox" id="preferExactLocation" formControlName="preferExactLocation" class="form-check-input">
+        <label for="preferExactLocation">Je recherche uniquement dans cette localité exacte.</label>
+    </div>
+
+    <div class="form-group">
+        <label for="descriptionRaw">Présentation / Résumé (optionnel)</label>
+        <textarea id="descriptionRaw" formControlName="descriptionRaw" class="form-control" rows="4"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="file">Télécharger votre CV (optionnel)</label>
+      <input type="file" id="file" (change)="onFileChange($event)" class="form-control-file">
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn btn-secondary" (click)="onCancel()">Annuler</button>
+      <button type="submit" class="btn btn-primary" [disabled]="isLoading" (click)="saveticket()">
+        <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        {{ isLoading ? 'Création...' : 'Créer le ticket' }}
+      </button>
+    </div>
+  </form>
+</div>
