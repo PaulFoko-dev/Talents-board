@@ -86,7 +86,7 @@ export class TicketCreation implements OnInit {
   }
 
   onCancel(): void {
-    // Redirection simple vers la page précédente (la liste)
+    // Redirection simple vers la page précédente (la l
     this.router.navigate(['/tickets-candidats']);
   }
 
