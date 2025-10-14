@@ -31,6 +31,7 @@ public final class UserMapper {
         dto.setLocalisation(user.getLocalisation());
         dto.setSiteWeb(user.getSiteWeb());
         dto.setCvPath(user.getCvPath());
+        dto.setNumero(user.getNumero());
         return dto;
     }
 
