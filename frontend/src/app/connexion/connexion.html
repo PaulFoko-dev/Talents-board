@@ -7,6 +7,23 @@
       <p>Accédez à votre compte Talents-board</p>
     </div>
 
+     <div class="inscription-options">
+          <button 
+            [class.active]="userType === 'candidat'" 
+            (click)="setUserType('candidat')"
+            class="user-type-btn">
+            👤 Candidat
+          </button>
+          <button 
+            [class.active]="userType === 'entreprise'" 
+            (click)="setUserType('entreprise')"
+            class="user-type-btn">
+            🏢 Entreprise
+          </button>
+          <br>
+      </div>
+
+      
     <form class="login-form" (ngSubmit)="onSubmit()">
       <div class="form-group">
         <label for="Email">Email</label>

@@ -3,16 +3,16 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../core/services/auth.service';
-import { FooterComponent } from '../components/footer/footer.component';
 
 @Component({
   selector: 'app-connexion',
   standalone: true,
-  imports: [CommonModule, FormsModule, FooterComponent],
+  imports: [CommonModule, FormsModule],
   templateUrl: './connexion.html',
   styleUrls: ['./connexion.scss']
 })
 export class Connexion {
+  userType: 'candidat' | 'entreprise' = 'candidat';
   isVisible = true;
   showPassword = false;
 
@@ -21,7 +21,12 @@ export class Connexion {
     motDePasse: ''
   };
 
+  
   constructor(private router: Router, private authService: AuthService) {}
+
+  setUserType(type: 'candidat' | 'entreprise'): void {
+    this.userType = type;
+  }
 
   close() {
     this.isVisible = false;
@@ -40,7 +45,12 @@ export class Connexion {
       if (res.status === 200) {
         localStorage.setItem('token', res.data.token);
         localStorage.setItem('userId', res.data.userId);
-        this.router.navigate(['/contact']);
+        if(this.userType === 'candidat') {
+          this.router.navigate(['/profil']);
+        } else {
+          this.router.navigate(['/'])
+        }
+        
       } else {
         alert(res.message || 'Erreur de connexion');
       }

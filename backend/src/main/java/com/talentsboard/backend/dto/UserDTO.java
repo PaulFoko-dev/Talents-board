@@ -32,6 +32,7 @@ public class UserDTO {
     private String competences;
     private String cv;           // URL du CV
     private String photoProfil;
+    private String numero;
 
     // entreprise
     private String logo;

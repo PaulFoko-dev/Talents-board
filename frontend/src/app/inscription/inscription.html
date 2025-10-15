@@ -1,0 +1,205 @@
+<div class="inscription-page">
+  <app-header></app-header>
+
+    <div class="container">
+      <div class="inscription-card">
+        <div class="inscription-header">
+          <h2>Inscription</h2>
+          <p>Rejoignez la communauté Talents-board</p>
+        </div>
+
+        <!-- Sélecteur de type d'utilisateur -->
+        <div class="inscription-options">
+          <button 
+            [class.active]="userType === 'candidat'" 
+            (click)="setUserType('candidat')"
+            class="user-type-btn">
+            👤 Candidat
+          </button>
+          <button 
+            [class.active]="userType === 'entreprise'" 
+            (click)="setUserType('entreprise')"
+            class="user-type-btn">
+            🏢 Entreprise
+          </button>
+        </div>
+
+        @if (userType === 'candidat') {
+        <form class="inscription-form" (ngSubmit)="register()">
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="nom">Nom *</label>
+              <input 
+                type="text" 
+                id="nom" 
+                [(ngModel)]="candidat.nom"
+                name="nom"
+                placeholder="Votre nom"
+                required>
+            </div>
+
+            <div class="form-group">
+              <label for="prenom">Prénom *</label>
+              <input 
+                type="text" 
+                id="prenom" 
+                [(ngModel)]="candidat.prenom"
+                name="prenom"
+                placeholder="Votre prénom"
+                required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email *</label>
+            <input 
+              type="email" 
+              id="email" 
+              [(ngModel)]="candidat.email"
+              name="email"
+              placeholder="email@exemple.com"
+              required>
+          </div>
+
+          <div class="form-group password-group">
+            <label for="motDePasse">Mot de passe *</label>
+            <div class="password-wrapper">
+              <input 
+                [type]="showPassword ? 'text' : 'password'" 
+                id="motDePasse" 
+                [(ngModel)]="candidat.motDePasse"
+                name="motDePasse"
+                placeholder="********"
+                required>
+              <button type="button" class="eye-btn" (click)="togglePassword()">
+                {{ showPassword ? '🙈' : '🐵' }}
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group password-group">
+            <label for="confirmationMotDePasse">Confirmation du mot de passe *</label>
+            <div class="password-wrapper">
+              <input 
+                [type]="showConfirmPassword ? 'text' : 'password'" 
+                id="confirmationMotDePasse" 
+                [(ngModel)]="candidat.confirmationMotDePasse"
+                name="confirmationMotDePasse"
+                placeholder="********"
+                required>
+              <button type="button" class="eye-btn" (click)="toggleConfirmPassword()">
+                {{ showConfirmPassword ? '🙈' : '🐵' }}
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="inscription-btn">
+            Créer mon Compte
+          </button>
+        </form>
+      }
+
+      @if (userType === 'entreprise') {
+        <!-- Formulaire Entreprise -->
+        <form class="inscription-form" (ngSubmit)="register()">
+          
+          <div class="form-group">
+            <label for="nom">Nom de l'entreprise *</label>
+            <input 
+              type="text" 
+              id="nom" 
+              [(ngModel)]="entreprise.nom"
+              name="nom"
+              placeholder="Nom de votre entreprise"
+              required>
+          </div>
+          
+          <div class="form-group">
+            <label for="email">Email *</label>
+            <input 
+              type="email" 
+              id="email" 
+              N
+              name="email"
+              placeholder="email@entreprise.com"
+              required>
+          </div>
+
+          <div class="form-group">
+            <label for="secteur">Secteur d'activité *</label>
+            <input 
+              type="text" 
+              id="secteur" 
+              [(ngModel)]="entreprise.secteur"
+              name="secteur"
+              required>
+          </div>
+
+          <div class="form-group">
+            <label for="localisation">Localisation *</label>
+            <input 
+              type="text" 
+              id="localisation" 
+              [(ngModel)]="entreprise.localisation"
+              name="localisation"
+              required>
+          </div>
+
+          <div class="form-group">
+            <label for="siteWeb">Site Web *</label>
+              <input 
+              type="url" 
+              id="siteWeb" 
+              [(ngModel)]="entreprise.siteWeb"
+              name="siteWeb"
+              required>
+          </div>
+
+          <div class="form-group password-group">
+            <label for="motDePasse">Mot de passe *</label>
+            <div class="password-wrapper">
+              <input 
+                [type]="showPassword ? 'text' : 'password'" 
+                id="motDePasse" 
+                [(ngModel)]="entreprise.motDePasse"
+                name="motDePasse"
+                placeholder="********"
+                required>
+              <button type="button" class="eye-btn" (click)="togglePassword()">
+                {{ showPassword ? '🙈' : '🐵' }}
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group password-group">
+            <label for="confirmationMotDePasse">Confirmation du mot de passe *</label>
+            <div class="password-wrapper">
+              <input 
+                [type]="showConfirmPassword ? 'text' : 'password'" 
+                id="confirmationMotDePasse" 
+                [(ngModel)]="entreprise.confirmationMotDePasse"
+                name="confirmationMotDePasse"
+                placeholder="********"
+                required>
+              <button type="button" class="eye-btn" (click)="toggleConfirmPassword()">
+                {{ showConfirmPassword ? '🙈' : '🐵' }}
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="inscription-btn">
+            Créer mon Compte
+          </button>
+        </form>
+      }
+        <div class="inscription-footer">
+          <p>Déjà un compte ? 
+            <a href="/connexion" class="login-link">Se connecter</a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+  <app-footer></app-footer>
+</div>
