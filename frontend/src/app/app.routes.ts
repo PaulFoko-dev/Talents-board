@@ -5,6 +5,8 @@ import { ProfileComponent } from './View/profile/profile.component';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { Connexion } from './connexion/connexion';
+import { OpportuniteComponent } from './View/opportunite/opportunite.component';
+import { LayoutComponent } from './layout/layout.component';
 
 export const routes: Routes = [
   // Route racine vers la page d'accueil
@@ -15,5 +17,14 @@ export const routes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: 'connexion', component: Connexion },
   { path: 'header', component: HeaderComponent },
-  { path: 'footer', component: FooterComponent }
+  { path: 'footer', component: FooterComponent },
+  
+  {
+  path: '',
+  component: LayoutComponent, // le layout qui contient la navbar
+  children: [
+    { path: 'opportunite', component: OpportuniteComponent }
+  ]
+}
+
 ];

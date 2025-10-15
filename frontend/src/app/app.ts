@@ -8,13 +8,14 @@ import { Temoignages } from "./components/temoignages/temoignages";
 import { HeaderComponent } from './components/header/header.component';
 import { HeroComponent } from './components/hero/hero.component';
 import { FormsModule } from '@angular/forms';
+import { LayoutComponent } from './layout/layout.component';
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
 
-  imports: [RouterOutlet, Temoignages, FooterComponent, FeaturesGridComponent, HowItWorksComponent, HeaderComponent, HeroComponent],
+  imports: [RouterOutlet, Temoignages, FooterComponent, FeaturesGridComponent, HowItWorksComponent, HeaderComponent, HeroComponent,LayoutComponent],
 
   templateUrl: './app.html',
   styleUrls: ['./app.scss']

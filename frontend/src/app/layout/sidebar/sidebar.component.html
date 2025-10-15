@@ -1,0 +1,18 @@
+<nav class="sidebar" [class.collapsed]="isCollapsed">
+  <div class="sidebar-header">
+    <div class="logo">TALENTS<span>BOARD</span></div>
+    <button class="toggle-btn" (click)="isCollapsed = !isCollapsed"></button>
+  </div>
+
+  <ul class="nav-links">
+    <li *ngFor="let item of menuItems"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }">
+      <a [routerLink]="item.route">
+        <i class="icon" [class]="item.icon"></i>
+        <span>{{ item.label }}</span>
+        <span *ngIf="item.badge" class="badge">{{ item.badge }}</span>
+      </a>
+    </li>
+  </ul>
+</nav>
