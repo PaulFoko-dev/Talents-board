@@ -25,7 +25,7 @@
         </div>
 
         @if (userType === 'candidat') {
-        <form class="inscription-form" (ngSubmit)="onSubmit()">
+        <form class="inscription-form" (ngSubmit)="register()">
           
           <div class="form-row">
             <div class="form-group">
@@ -94,35 +94,6 @@
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="competences">Compétences</label>
-            <input 
-              type="text" 
-              id="competences" 
-              [(ngModel)]="candidat.competences"
-              name="competences"
-              placeholder="Ex: React, Node.js, Design UX">
-            <small>Séparez vos compétences par des virgules</small>
-          </div>
-
-          <div class="form-group">
-            <label for="cv">CV (PDF) *</label>
-            <div class="file-upload-wrapper">
-              <input 
-                type="file" 
-                id="cv" 
-                (change)="onFileSelected($event)"
-                accept=".pdf"
-                required>
-              <div class="file-upload-display">
-                <span class="file-name">
-                  {{ candidat.cv ? candidat.cv.name : 'Aucun fichier choisi' }}
-                </span>
-                <span class="file-requirements">PDF uniquement, max 5MB</span>
-              </div>
-            </div>
-          </div>
-
           <button type="submit" class="inscription-btn">
             Créer mon Compte
           </button>
@@ -131,7 +102,7 @@
 
       @if (userType === 'entreprise') {
         <!-- Formulaire Entreprise -->
-        <form class="inscription-form" (ngSubmit)="onSubmit()">
+        <form class="inscription-form" (ngSubmit)="register()">
           
           <div class="form-group">
             <label for="nom">Nom de l'entreprise *</label>
@@ -156,13 +127,32 @@
           </div>
 
           <div class="form-group">
-            <label for="adresseE">Adresse *</label>
+            <label for="secteur">Secteur d'activité *</label>
             <input 
               type="text" 
-              id="adresse" 
-              [(ngModel)]="entreprise.adresse"
-              name="adresse"
-              placeholder="Adresse de votre entreprise"
+              id="secteur" 
+              [(ngModel)]="entreprise.secteur"
+              name="secteur"
+              required>
+          </div>
+
+          <div class="form-group">
+            <label for="localisation">Localisation *</label>
+            <input 
+              type="text" 
+              id="localisation" 
+              [(ngModel)]="entreprise.localisation"
+              name="localisation"
+              required>
+          </div>
+
+          <div class="form-group">
+            <label for="siteWeb">Site Web *</label>
+              <input 
+              type="url" 
+              id="siteWeb" 
+              [(ngModel)]="entreprise.siteWeb"
+              name="siteWeb"
               required>
           </div>
 

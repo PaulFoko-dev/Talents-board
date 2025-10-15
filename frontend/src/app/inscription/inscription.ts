@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { FooterComponent } from '../components/footer/footer.component';
 import { HeaderComponent } from '../components/header/header.component';
 import { FormsModule } from "@angular/forms";
+import { AuthService } from '../core/services/auth.service';
 
 @Component({
   selector: 'app-inscription',
@@ -22,21 +23,22 @@ export class Inscription {
     prenom: '',
     email: '',
     motDePasse: '',
-    confirmationMotDePasse: '',
-    competences: '',
-    cv: null as File | null
+    confirmationMotDePasse: ''
   };
   
   // Modèle pour les entreprises
   entreprise = {
     nom: '',
-    adresse: '',
     email: '',
     motDePasse: '',
-    confirmationMotDePasse: ''
+    confirmationMotDePasse: '',
+    secteur: '',
+    localisation: '',
+    siteWeb: ''
   };
 
-  constructor(private router: Router) {}
+
+  constructor(private router: Router,  private authService: AuthService) {}
 
   setUserType(type: 'candidat' | 'entreprise'): void {
     this.userType = type;
@@ -50,51 +52,56 @@ export class Inscription {
     this.showConfirmPassword = !this.showConfirmPassword;
   }
 
-  onFileSelected(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      // Vérifications du fichier
-      if (file.size > 5 * 1024 * 1024) {
-        alert('Le fichier est trop volumineux. Taille maximale: 5MB');
-        return;
-      }
-      if (file.type !== 'application/pdf') {
-        alert('Seuls les fichiers PDF sont acceptés');
-        return;
-      }
-      this.candidat.cv = file;
-    }
-  }
+    async register(): Promise<void> {
+      if (this.userType === 'candidat') {
+        console.log(this);
+        if (this.candidat.motDePasse !== this.candidat.confirmationMotDePasse) {
+          alert('Les mots de passe ne correspondent pas');
+          return;
+        }
+        
+        try {
+          const {confirmationMotDePasse, ...candidat} = this.candidat;
+          const res = await this.authService.register_candidat(
+            candidat
+          );
 
-  onSubmit(): void {
-    if (this.userType === 'candidat') {
-      
-      if (this.candidat.motDePasse !== this.candidat.confirmationMotDePasse) {
-        alert('Les mots de passe ne correspondent pas');
-        return;
-      }
-      
-      if (!this.candidat.cv) {
-        alert('Veuillez télécharger votre CV');
-        return;
-      }
-      
-      console.log('Inscription candidat:', this.candidat);
-      
+          console.log('Réponse du backend:', res);
+
+          if (res.status === 200) {
+              this.router.navigate(['/connexion'])
+            
+          } else {
+            alert(res.message);
+          }
+        } catch (error: any) {
+          alert(error.message );
+        }
+        
     } else {
       if (this.entreprise.motDePasse !== this.entreprise.confirmationMotDePasse) {
         alert('Les mots de passe ne correspondent pas');
         return;
       }
       
-      console.log('Inscription entreprise:', this.entreprise);
-    }
-    
-    // Redirection après inscription réussie
-    this.router.navigate(['/connexion']);
-  }
+      try {
+          const {confirmationMotDePasse, ...entreprise} = this.candidat;
+          const res = await this.authService.register_entreprise(
+            entreprise
+          );
 
-  goToLogin(): void {
-    this.router.navigate(['/connexion']);
+          console.log('Réponse du backend:', res);
+
+          if (res.status === 200) {
+              this.router.navigate(['/connexion'])
+            
+          } else {
+            alert(res.message);
+          }
+        } catch (error: any) {
+          alert(error.message );
+        }
+    }
+
   }
 }
