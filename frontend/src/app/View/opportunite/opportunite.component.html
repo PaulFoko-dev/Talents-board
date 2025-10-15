@@ -1,0 +1,145 @@
+<section class="page">
+  <!-- En-tête -->
+  <header class="header">
+    <h1>Vos Opportunités personnalisées</h1>
+    <p>Découvrez les offres qui vous correspondent le mieux.</p>
+  </header>
+
+  <!-- Barre de recherche + filtres -->
+  <div class="filters">
+    <div class="search">
+      <input
+        type="text"
+        placeholder="Rechercher par poste, entreprise, compétences…"
+        [ngModel]="q()"
+        (ngModelChange)="q.set($event)"
+      />
+      <button class="btn primary">Filtres</button>
+    </div>
+
+    <div class="toggles">
+      <label class="switch">
+        <input type="checkbox" [checked]="onlyHighMatch()" (change)="onlyHighMatch.set($event.target.checked)">
+        <span class="slider"></span>
+      </label>
+      <span class="switch-label">Match ≥ 70%</span>
+    </div>
+  </div>
+
+  <!-- Sélecteurs -->
+  <div class="selectors">
+    <div class="select">
+      <label>Contrat</label>
+      <select [ngModel]="fContrat()" (ngModelChange)="fContrat.set($event)">
+        <option>Tous</option>
+        <option>CDI</option>
+        <option>CDD</option>
+        <option>Stage</option>
+        <option>Freelance</option>
+      </select>
+    </div>
+    <div class="select">
+      <label>Télétravail</label>
+      <select [ngModel]="fMode()" (ngModelChange)="fMode.set($event)">
+        <option>Tous</option>
+        <option>Hybride</option>
+        <option>Télétravail</option>
+        <option>Full Remote</option>
+        <option>Présentiel</option>
+      </select>
+    </div>
+    <div class="select">
+      <label>Secteur</label>
+      <select [ngModel]="fSecteur()" (ngModelChange)="fSecteur.set($event)">
+        <option>Tous</option>
+        <option>Tech</option>
+        <option>Finance</option>
+        <option>Santé</option>
+        <option>Industriel</option>
+      </select>
+    </div>
+    <div class="range">
+      <label>Salaire (€k)</label>
+      <div class="range-row">
+        <input type="number" placeholder="min" [ngModel]="fSalaireMin()" (ngModelChange)="fSalaireMin.set($event ? +$event : null)">
+        <span>–</span>
+        <input type="number" placeholder="max" [ngModel]="fSalaireMax()" (ngModelChange)="fSalaireMax.set($event ? +$event : null)">
+        <button class="btn ghost" (click)="resetSalaire()">Réinitialiser</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Grille + Panneau latéral -->
+  <div class="grid">
+    <div class="cards">
+      <div class="result-meta">
+        <strong>{{ filtered().length }}</strong> offre(s)
+      </div>
+
+      <article class="card" *ngFor="let job of filtered()">
+        <div class="card-header">
+          <div class="avatar">{{ job.company.slice(0,2).toUpperCase() }}</div>
+          <div class="titles">
+            <h3>{{ job.title }}</h3>
+            <div class="meta">
+              <span>{{ job.city }}</span>
+              <span>•</span>
+              <span>{{ job.typeContrat }}</span>
+              <span>•</span>
+              <span>{{ job.mode }}</span>
+            </div>
+          </div>
+          <div class="match" [attr.aria-label]="'Compatibilité ' + job.compatibilite + '%'">
+            <div class="bar">
+              <div class="fill" [style.width.%]="job.compatibilite"></div>
+            </div>
+            <span class="value">{{ job.compatibilite }}%</span>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div class="row">
+            <div class="block">
+              <label>Salaire</label>
+              <div class="value">{{ job.salaireMinK }}k – {{ job.salaireMaxK }}k €</div>
+            </div>
+            <div class="block">
+              <label>Compétences</label>
+              <div class="skills-grid" aria-label="Compétences">
+                <span class="chip" *ngFor="let c of job.competences">{{ c }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-actions">
+          <a class="btn primary" [routerLink]="['/opportunite', job.id]">Voir détails</a>
+          <button class="btn outline">💬</button>
+        </div>
+      </article>
+    </div>
+
+    <aside class="side">
+      <div class="panel">
+        <h4>Suggestions IA</h4>
+        <ul class="suggestions">
+          <li>Postes proches de vos compétences clés.</li>
+          <li>Boostez votre compatibilité en ajoutant TypeScript.</li>
+          <li>Formation rapide: GraphQL en 7 jours.</li>
+        </ul>
+        <button class="btn accent full">Activer les recommandations</button>
+      </div>
+    </aside>
+  </div>
+
+  <!-- CTA bas de page -->
+  <div class="cta">
+    <h3>Ne laissez pas passer l’opportunité de vos rêves 🚀</h3>
+    <p>Activez les alertes pour être notifié des nouvelles opportunités qui vous correspondent.</p>
+    <label class="switch">
+      <input type="checkbox">
+      <span class="slider"></span>
+    </label>
+    <span class="switch-label">Alertes opportunités</span>
+  </div>
+</section>
