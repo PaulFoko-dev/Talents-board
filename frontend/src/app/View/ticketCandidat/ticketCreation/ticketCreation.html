@@ -4,25 +4,22 @@
     <p>Remplissez les informations ci-dessous pour créer votre demande d'opportunités.</p>
   </header>
 
-  <form [formGroup]="ticketForm" (ngSubmit)="onSubmit()" novalidate>
-    
+  <!-- FORMULAIRE DE CREATION -->
+  <form [formGroup]="ticketForm" (ngSubmit)="onSubmit()" novalidate *ngIf="!createdTicket">
     <div class="form-group">
       <label for="title">Titre du profil / Poste recherché</label>
-      <input type="text" id="title" formControlName="title" class="form-control" [ngClass]="{ 'is-invalid': submitted && ticketForm.get('title')?.errors }">
-      <div *ngIf="submitted && ticketForm.get('title')?.errors" class="invalid-feedback">
-        <div *ngIf="ticketForm.get('title')?.hasError('required')">Le titre est obligatoire.</div>
-      </div>
+      <input id="title" formControlName="title" type="text" class="form-control" required>
     </div>
 
     <div class="form-group">
       <label for="localisation">Localisation souhaitée</label>
-      <input type="text" id="localisation" formControlName="localisation" class="form-control" placeholder="Ex: Paris, Lyon, Télétravail...">
+      <input id="localisation" formControlName="localisation" type="text" class="form-control">
     </div>
 
     <div class="form-group">
       <label for="domaine">Domaine d'activité</label>
       <select id="domaine" formControlName="domaine" class="form-control">
-        <option value="" disabled>Sélectionnez un domaine</option>
+        <option value="">Sélectionnez...</option>
         <option *ngFor="let domaine of domaines" [value]="domaine">{{ domaine }}</option>
       </select>
     </div>
@@ -30,53 +27,141 @@
     <div class="form-group">
       <label for="niveauExperience">Niveau d'expérience</label>
       <select id="niveauExperience" formControlName="niveauExperience" class="form-control">
-        <option value="" disabled>Sélectionnez un niveau</option>
+        <option value="">Sélectionnez...</option>
         <option *ngFor="let niveau of niveauxExperience" [value]="niveau">{{ niveau }}</option>
       </select>
     </div>
 
-    <div class="form-group">
-      <label for="availability">Disponibilité</label>
-      <select id="availability" formControlName="availability" class="form-control">
-        <option value="" disabled>Sélectionnez votre disponibilité</option>
-        <option *ngFor="let dispo of disponibilites" [value]="dispo">{{ dispo }}</option>
-      </select>
-    </div>
-    
     <fieldset class="form-group-fieldset">
-      <legend>Attentes salariales (brut annuel en €)</legend>
+      <legend>Attentes salariales (€ brut annuel)</legend>
       <div class="fieldset-content">
-        <div class="form-group">
-          <label for="salaireMinExpectation">Minimum</label>
-          <input type="number" id="salaireMinExpectation" formControlName="salaireMinExpectation" class="form-control" placeholder="45000">
-        </div>
-        <div class="form-group">
-          <label for="salaireMaxExpectation">Maximum</label>
-          <input type="number" id="salaireMaxExpectation" formControlName="salaireMaxExpectation" class="form-control" placeholder="55000">
-        </div>
+        <input type="number" formControlName="salaireMinExpectation" placeholder="Min" class="form-control me-2">
+        <input type="number" formControlName="salaireMaxExpectation" placeholder="Max" class="form-control">
       </div>
     </fieldset>
 
-    <div class="form-group form-group-checkbox">
-        <input type="checkbox" id="preferExactLocation" formControlName="preferExactLocation" class="form-check-input">
-        <label for="preferExactLocation">Je recherche uniquement dans cette localité exacte.</label>
-    </div>
-
     <div class="form-group">
-        <label for="descriptionRaw">Présentation / Résumé (optionnel)</label>
-        <textarea id="descriptionRaw" formControlName="descriptionRaw" class="form-control" rows="4"></textarea>
-    </div>
-
-    <div class="form-group">
-      <label for="file">Télécharger votre CV (optionnel)</label>
-      <input type="file" id="file" (change)="onFileChange($event)" class="form-control-file">
+      <label for="descriptionRaw">Présentation / Résumé</label>
+      <textarea id="descriptionRaw" formControlName="descriptionRaw" class="form-control" rows="3"></textarea>
     </div>
 
     <div class="form-actions">
-      <button type="button" class="btn btn-secondary" (click)="onCancel()">Annuler</button>
-      <button type="submit" class="btn btn-primary" [disabled]="isLoading" (click)="saveticket()">
-        <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+      <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+        <span *ngIf="isLoading" class="spinner-border spinner-border-sm"></span>
         {{ isLoading ? 'Création...' : 'Créer le ticket' }}
+      </button>
+    </div>
+  </form>
+
+  <!-- ✅ FORMULAIRE DE VALIDATION COMPLET (après retour API) -->
+  <form *ngIf="createdTicket" [formGroup]="validationForm" (ngSubmit)="onValidate()" class="mt-4">
+    <h2>🧩 Validation des informations extraites</h2>
+    <p>Veuillez vérifier et corriger les informations avant de valider le ticket.</p>
+
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <label>Titre</label>
+        <input formControlName="title" class="form-control">
+      </div>
+
+      <div>
+        <label>Localisation</label>
+        <input formControlName="localisation" class="form-control">
+      </div>
+
+      <div>
+        <label>Domaine</label>
+        <input formControlName="domaine" class="form-control">
+      </div>
+
+      <div>
+        <label>Type de contrat</label>
+        <input formControlName="typeContrat" class="form-control">
+      </div>
+
+      <div>
+        <label>Niveau d'expérience</label>
+        <input formControlName="niveauExperience" class="form-control">
+      </div>
+
+      <div>
+        <label>Diplôme requis</label>
+        <input formControlName="diplomeRequis" class="form-control">
+      </div>
+
+      <div>
+        <label>Mode de travail</label>
+        <select formControlName="modeTravail" class="form-control">
+          <option value="Présentiel">Présentiel</option>
+          <option value="Hybride">Hybride</option>
+          <option value="Télétravail">Télétravail</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Jours télétravail / semaine</label>
+        <input type="number" formControlName="teletravailJourParSemaine" class="form-control">
+      </div>
+
+      <div>
+        <label>% Télétravail</label>
+        <input type="number" formControlName="teletravailPourcentage" class="form-control">
+      </div>
+
+      <div>
+        <label>Salaire minimum (€)</label>
+        <input type="number" formControlName="salaireMin" class="form-control">
+      </div>
+
+      <div>
+        <label>Salaire maximum (€)</label>
+        <input type="number" formControlName="salaireMax" class="form-control">
+      </div>
+    </div>
+
+    <!-- ✅ LISTES MODERNES -->
+    <div class="mt-4">
+      <label>Compétences</label>
+      <div class="tag-container">
+        <span class="tag" *ngFor="let comp of validationForm.value.competences; let i = index">
+          {{ comp }}
+          <button type="button" (click)="removeItem('competences', i)">×</button>
+        </span>
+        <input placeholder="Ajouter une compétence" (keydown.enter)="addItem($event, 'competences')">
+      </div>
+    </div>
+
+    <div class="mt-3">
+      <label>Langues</label>
+      <div class="tag-container">
+        <span class="tag" *ngFor="let lang of validationForm.value.languages; let i = index">
+          {{ lang }}
+          <button type="button" (click)="removeItem('languages', i)">×</button>
+        </span>
+        <input placeholder="Ajouter une langue" (keydown.enter)="addItem($event, 'languages')">
+      </div>
+    </div>
+
+    <div class="mt-3">
+      <label>Avantages</label>
+      <div class="tag-container">
+        <span class="tag" *ngFor="let adv of validationForm.value.avantages; let i = index">
+          {{ adv }}
+          <button type="button" (click)="removeItem('avantages', i)">×</button>
+        </span>
+        <input placeholder="Ajouter un avantage" (keydown.enter)="addItem($event, 'avantages')">
+      </div>
+    </div>
+
+    <div class="mt-4">
+      <label>Description</label>
+      <textarea formControlName="descriptionRaw" class="form-control" rows="4"></textarea>
+    </div>
+
+    <div class="form-actions mt-4">
+      <button type="submit" class="btn btn-success" [disabled]="isValidating">
+        <span *ngIf="isValidating" class="spinner-border spinner-border-sm"></span>
+        {{ isValidating ? 'Validation...' : 'Valider le ticket' }}
       </button>
     </div>
   </form>
