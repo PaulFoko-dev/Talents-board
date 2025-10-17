@@ -9,8 +9,7 @@ import { OpportuniteComponent } from './View/opportunite/opportunite.component';
 import { LayoutComponent } from './layout/layout.component';
 import { Inscription } from './inscription/inscription';
 import { TicketCreation } from './View/ticketCandidat/ticketCreation/ticketCreation';
-import { TicketCandidat } from './View/ticketCandidat/ticketCandidat';import { TicketCandidat } from './View/ticketCandidat/ticketCandidat';
-import { TicketCreation } from './View/ticketCandidat/ticketCreation/ticketCreation';
+import { TicketCandidat } from './View/ticketCandidat/ticketCandidat';
 
 export const routes: Routes = [
   // Route racine vers la page d'accueil

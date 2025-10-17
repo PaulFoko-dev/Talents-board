@@ -46,7 +46,7 @@ export class Connexion {
         localStorage.setItem('token', res.data.token);
         localStorage.setItem('userId', res.data.userId);
         if(this.userType === 'candidat') {
-          this.router.navigate(['/profil']);
+          this.router.navigate(['/ticketCandidat']);
         } else {
           this.router.navigate(['/'])
         }

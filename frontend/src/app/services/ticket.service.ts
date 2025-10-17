@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import axios, { AxiosError } from 'axios';
+import { BASE_URL } from "../../app/baseUrl"
 
 @Injectable({
   providedIn: 'root'
 })
 export class TicketService {
   // private readonly baseUrl = "http://10.180.171.237:8080";
-  private readonly baseUrl = "http://127.0.0.1:8080";
+  // private readonly baseUrl = "http://localhost:8080";
 
   constructor() { }
 
@@ -14,10 +15,9 @@ export class TicketService {
    * 🔹 Génère les en-têtes d'authentification à partir du localStorage
    */
   private getAuthHeaders() {
-    // const token = localStorage.getItem("token");
-    const token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjlkMjEzMGZlZjAyNTg3ZmQ4ODYxODg2OTgyMjczNGVmNzZhMTExNjUiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiZGF5Iiwicm9sZSI6IkNBTkRJREFUIiwiaXNzIjoiaHR0cHM6Ly9zZWN1cmV0b2tlbi5nb29nbGUuY29tL3RhbGVudHMtYm9hcmQtYjZkMzYiLCJhdWQiOiJ0YWxlbnRzLWJvYXJkLWI2ZDM2IiwiYXV0aF90aW1lIjoxNzYwNjE1MjQyLCJ1c2VyX2lkIjoiMmdHeFA3VkJUZVB2MzF5S2ZwMnRGR09rV1E4MyIsInN1YiI6IjJnR3hQN1ZCVGVQdjMxeUtmcDJ0RkdPa1dRODMiLCJpYXQiOjE3NjA2MTUyNDIsImV4cCI6MTc2MDYxODg0MiwiZW1haWwiOiJtaWtlQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJlbWFpbCI6WyJtaWtlQGdtYWlsLmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.X4aNd_YmOiZ29bbVkHBpBhpgJ6LvpPMGTDqpcJlh2zZYFgjf4vjBIx_kyKjuk4m5CM3sydYfOLRotMJs9yzyaNxIxVJqQhoBEY0_SazvsnTUluKBjwQv8nD8SWJCN_-deiMIcp1nT3F2CZctwofROmwuA3hZy6JPYRZ6vUDx8w0r0RwnVnGta_1_Zx6CnqOib4x69lUei5UkV2sz2Z2wx-qkcf5BfNjBFE8zljbI5dKLPE7Zs8EIRUe3XFe4KzjHbBxIGjL-lJytuW8GfpnruYJIx01GOzfKJQDX2eOhRQPMfrGnFiD9VFEtZTiRWNPjVM3DTmy9DUG0Cfr5oTRIgg";
+    const token = localStorage.getItem("token");
     if (!token) {
-      throw new Error("❌ Token d'authentification introuvable dans le localStorage.");
+      console.log("❌ Token d'authentification introuvable dans le localStorage.");
     }
 
     return {
@@ -32,7 +32,7 @@ export class TicketService {
     const headers = this.getAuthHeaders();
 
     try {
-      const response = await axios.get(`${this.baseUrl}/api/tickets/list`, { headers });
+      const response = await axios.get(`${BASE_URL}api/tickets/list`, { headers });
       console.log("✅ SUCCÈS [getTickets]:", response.data);
       return response.data;
     } catch (error) {
@@ -45,20 +45,24 @@ export class TicketService {
    * @param data Objet contenant les infos du formulaire
    * @param file (optionnel) Fichier joint (CV, PDF, etc.)
    */
+  // ticket.service.ts
+
   async createCandidateTicket(data: any, file?: File): Promise<any> {
     const formData = new FormData();
-    formData.append('data', JSON.stringify(data)); // <-- data doit contenir les champs du DTO
+    formData.append('data', JSON.stringify(data));
     if (file) {
       formData.append('file', file, file.name);
     }
 
+    // ✅ CORRECTION ICI : L'en-tête Content-Type est supprimé
     const headers = {
       ...this.getAuthHeaders(),
-      'Content-Type': 'multipart/form-data'
+      // PAS DE 'Content-Type' ICI ! Axios le gère.
     };
 
     try {
-      const response = await axios.post(`${this.baseUrl}/api/tickets/candidat`, formData, { headers });
+      const response = await axios.post(`${BASE_URL}api/tickets/candidat`, formData, { headers, 
+        timeout: 80000 });
       return response.data;
     } catch (error) {
       this.handleApiError('createCandidateTicket', error);
@@ -71,11 +75,6 @@ export class TicketService {
    * L'ID du candidat est pris dans le localStorage
    */
   async validateCandidateTicket(ticketData: any): Promise<any> {
-    const userId = localStorage.getItem("userId");
-    if (!userId) {
-      throw new Error("❌ L'ID utilisateur est introuvable dans le localStorage.");
-    }
-
     const headers = {
       ...this.getAuthHeaders(),
       'Content-Type': 'application/json'
@@ -83,7 +82,7 @@ export class TicketService {
 
     try {
       const response = await axios.put(
-        `${this.baseUrl}/api/tickets/${userId}/validate`,
+        `${BASE_URL}api/tickets/${ticketData.id}/validate`,
         ticketData,
         { headers }
       );
