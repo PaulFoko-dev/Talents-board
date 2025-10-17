@@ -8,6 +8,8 @@ import { Connexion } from './connexion/connexion';
 import { OpportuniteComponent } from './View/opportunite/opportunite.component';
 import { LayoutComponent } from './layout/layout.component';
 import { Inscription } from './inscription/inscription';
+import { TicketCreation } from './View/ticketCandidat/ticketCreation/ticketCreation';
+import { TicketCandidat } from './View/ticketCandidat/ticketCandidat';
 
 export const routes: Routes = [
   // Route racine vers la page d'accueil
@@ -19,13 +21,6 @@ export const routes: Routes = [
   { path: 'connexion', component: Connexion },
   { path: 'header', component: HeaderComponent },
   { path: 'footer', component: FooterComponent },
-  
-  {
-  path: '',
-  component: LayoutComponent, // le layout qui contient la navbar
-  children: [
-    { path: 'opportunite', component: OpportuniteComponent }
-  ]
-}
-
+  { path: 'ticketCreation', component: TicketCreation},
+  { path: 'ticketCandidat', component: TicketCandidat }
 ];
