@@ -1,11 +1,9 @@
 <section class="page">
-  <!-- En-tête -->
   <header class="header">
     <h1>Vos Opportunités personnalisées</h1>
     <p>Découvrez les offres qui vous correspondent le mieux.</p>
   </header>
 
-  <!-- Barre de recherche + filtres -->
   <div class="filters">
     <div class="search">
       <input
@@ -26,7 +24,6 @@
     </div>
   </div>
 
-  <!-- Sélecteurs -->
   <div class="selectors">
     <div class="select">
       <label>Contrat</label>
@@ -69,7 +66,6 @@
     </div>
   </div>
 
-  <!-- Grille + Panneau latéral -->
   <div class="grid">
     <div class="cards">
       <div class="result-meta">
@@ -82,7 +78,7 @@
           <div class="titles">
             <h3>{{ job.title }}</h3>
             <div class="meta">
-              <span>{{ job.city }}</span>
+              <span>{{ job.localisation || job.city }}</span>
               <span>•</span>
               <span>{{ job.typeContrat }}</span>
               <span>•</span>
@@ -101,13 +97,24 @@
           <div class="row">
             <div class="block">
               <label>Salaire</label>
-              <div class="value">{{ job.salaireMinK }}k – {{ job.salaireMaxK }}k €</div>
-            </div>
-            <div class="block">
-              <label>Compétences</label>
-              <div class="skills-grid" aria-label="Compétences">
-                <span class="chip" *ngFor="let c of job.competences">{{ c }}</span>
+              <div class="value" *ngIf="job.salaireMinK != null || job.salaireMaxK != null">
+                {{ job.salaireMinK ? job.salaireMinK + 'k' : '?' }} – {{ job.salaireMaxK ? job.salaireMaxK + 'k' : '?' }} €
               </div>
+              <div class="value" *ngIf="job.salaireMinK == null && job.salaireMaxK == null">
+                {{ job.salaireRangeRaw || 'Non renseigné' }}
+              </div>
+            </div>
+
+            <div class="block">
+              <label>Domaine</label>
+              <div class="value">{{ job.domaine || '—' }}</div>
+            </div>
+          </div>
+
+          <div class="row" *ngIf="job.descriptionRaw">
+            <div class="block full">
+              <label>Description</label>
+              <div class="value description-preview">{{ job.descriptionRaw | slice:0:220 }}{{ job.descriptionRaw.length > 220 ? '…' : '' }}</div>
             </div>
           </div>
         </div>
@@ -132,7 +139,6 @@
     </aside>
   </div>
 
-  <!-- CTA bas de page -->
   <div class="cta">
     <h3>Ne laissez pas passer l’opportunité de vos rêves 🚀</h3>
     <p>Activez les alertes pour être notifié des nouvelles opportunités qui vous correspondent.</p>
