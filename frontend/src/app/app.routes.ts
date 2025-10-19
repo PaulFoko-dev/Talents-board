@@ -10,6 +10,8 @@ import { LayoutComponent } from './layout/layout.component';
 import { Inscription } from './inscription/inscription';
 import { TicketCreation } from './View/ticketCandidat/ticketCreation/ticketCreation';
 import { TicketCandidat } from './View/ticketCandidat/ticketCandidat';
+import { EntrepriseDashboardComponent } from './View/ticketsEntreprise/dashboard/ticketsEntrepriseDashboard'
+
 
 export const routes: Routes = [
   // Route racine vers la page d'accueil
@@ -22,5 +24,6 @@ export const routes: Routes = [
   { path: 'header', component: HeaderComponent },
   { path: 'footer', component: FooterComponent },
   { path: 'ticketCreation', component: TicketCreation},
-  { path: 'ticketCandidat', component: TicketCandidat }
+  { path: 'ticketCandidat', component: TicketCandidat },
+  { path: 'dashboardEntreprise', component: EntrepriseDashboardComponent}
 ];
