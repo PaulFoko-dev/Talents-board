@@ -7,6 +7,8 @@ import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from "../../components/header/header.component";
 import axios from 'axios';
 import { BASE_URL } from '../../baseUrl';
+import { SidebarNav } from "../../components/sidebar-nav/sidebar-nav";
+import { MatSidenavContainer, MatSidenav, MatSidenavContent } from "@angular/material/sidenav";
 
 type Job = {
   id: string;
@@ -18,17 +20,48 @@ type Job = {
   salaireMinK?: number | null;
   salaireMaxK?: number | null;
   salaireRangeRaw?: string | null;
-  compatibilite: number; // 0..100
-  // compétences/languages/avantages intentionally omitted from display
+  compatibilite: number;
   descriptionRaw?: string;
   domaine?: string;
   localisation?: string;
 };
 
+type CandidateDetails = {
+  id: string;
+  ownerUid: string;
+  ownerType: string;
+  status: string;
+  title: string;
+  descriptionRaw: string;
+  company: string;
+  domaine: string;
+  salaryRange: string;
+  availability: string;
+  localisation: string;
+  typeContrat: string;
+  niveauExperience: string;
+  competences: string[];
+  languages: string[];
+  avantages: string[];
+  modeTravail: string;
+  teletravailJourParSemaine: number;
+  scoreDenorm: any;
+};
+
 @Component({
   selector: 'app-opportunites',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, ChunkPipe, HeaderComponent],
+  imports: [
+    CommonModule, 
+    FormsModule, 
+    RouterModule, 
+    ChunkPipe, 
+    HeaderComponent, 
+    SidebarNav, 
+    MatSidenavContainer, 
+    MatSidenav,
+    MatSidenavContent
+  ],
   templateUrl: './opportunite.component.html',
   styleUrls: ['./opportunite.component.scss']
 })
@@ -49,6 +82,11 @@ export class OpportuniteComponent implements OnInit {
   fSalaireMin = signal<number | null>(null);
   fSalaireMax = signal<number | null>(null);
   onlyHighMatch = signal<boolean>(false);
+
+  // Etat du modal
+  showModal = false;
+  isLoading = false;
+  candidateDetails: CandidateDetails | null = null;
 
   filtered = computed(() => {
     const q = this.q().toLowerCase().trim();
@@ -76,7 +114,6 @@ export class OpportuniteComponent implements OnInit {
     this.fetchPublished();
   }
 
-  // Exposé pour debug / action manuelle si besoin
   async fetchPublished() {
     try {
       const token = localStorage.getItem('token');
@@ -84,18 +121,15 @@ export class OpportuniteComponent implements OnInit {
       if (token) headers.Authorization = `Bearer ${token}`;
 
       const url = `${BASE_URL}api/tickets/published`;
-
       const resp = await axios.get(url, { headers, timeout: 80000 });
       const payload = resp.data;
 
-      // sécurité: valider la forme attendue
       if (!payload || !Array.isArray(payload.data)) {
         console.error('Réponse inattendue de api/tickets/published', payload);
         return;
       }
 
       const mapped: Job[] = payload.data.map((d: any) => {
-        // tenter d'extraire un min/max depuis salaryRange (ex: "40-50k" ou "40k - 50k")
         let min: number | null = null;
         let max: number | null = null;
         const sr: string | undefined = d.salaryRange;
@@ -105,7 +139,6 @@ export class OpportuniteComponent implements OnInit {
             const parsed = nums.map(n => parseFloat(n.replace(',', '.')));
             min = parsed[0] || null;
             if (parsed.length >= 2) max = parsed[1] || null;
-            // normaliser en milliers si la chaîne contient 'k' ou 'K'
             if (/[kK]/.test(sr)) {
               if (min != null) min = Math.round(min);
               if (max != null) max = Math.round(max);
@@ -113,19 +146,15 @@ export class OpportuniteComponent implements OnInit {
           }
         }
 
-        // compatibilite non fournie par l'API: fallback 0
         let compat = 0;
-        // si scoreDenorm contient une valeur utile, essayer d'en dériver un pourcentage
         try {
           const sd = d.scoreDenorm;
-          // tentative prudente: parcourir et prendre le premier nombre trouvé
           if (sd && typeof sd === 'object') {
             const text = JSON.stringify(sd);
             const m = text.match(/-?\d+(\.\d+)?/);
             if (m) {
               const v = parseFloat(m[0]);
               if (!Number.isNaN(v)) {
-                // normaliser grossièrement
                 compat = Math.max(0, Math.min(100, Math.round(v)));
               }
             }
@@ -156,6 +185,56 @@ export class OpportuniteComponent implements OnInit {
     }
   }
 
-  resetSalaire() { this.fSalaireMin.set(null); this.fSalaireMax.set(null); }
-  setRange(min: number|null, max: number|null) { this.fSalaireMin.set(min); this.fSalaireMax.set(max); }
+  // Méthodes pour le modal
+  async openCandidateModal(ticketId: string) {
+    console.log('Ouverture du modal pour le ticket:', ticketId);
+    this.showModal = true;
+    this.isLoading = true;
+    this.candidateDetails = null;
+
+    try {
+      const token = localStorage.getItem('token');
+      const headers: any = {};
+      if (token) headers.Authorization = `Bearer ${token}`;
+
+      const url = `${BASE_URL}api/tickets/${ticketId}`;
+      const response = await axios.get(url, { headers, timeout: 80000 });
+      
+      if (response.data && response.data.data) {
+        this.candidateDetails = response.data.data;
+        console.log('Détails du candidat chargés:', this.candidateDetails);
+      } else {
+        console.error('Réponse inattendue de api/tickets/{id}', response.data);
+      }
+    } catch (error: any) {
+      console.error('Erreur lors du chargement des détails du candidat:', error?.response?.data ?? error?.message ?? error);
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  closeModal() {
+    console.log('Fermeture du modal');
+    this.showModal = false;
+    this.candidateDetails = null;
+    this.isLoading = false;
+  }
+
+  contactCandidate() {
+    if (this.candidateDetails) {
+      console.log('Contacter le candidat:', this.candidateDetails);
+      // Implémentez votre logique de contact ici
+      alert(`Fonction de contact pour ${this.candidateDetails.title} à implémenter`);
+    }
+  }
+
+  resetSalaire() { 
+    this.fSalaireMin.set(null); 
+    this.fSalaireMax.set(null); 
+  }
+  
+  setRange(min: number|null, max: number|null) { 
+    this.fSalaireMin.set(min); 
+    this.fSalaireMax.set(max); 
+  }
 }

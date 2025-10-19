@@ -1,151 +1,213 @@
-<section class="page">
-  <header class="header">
-    <h1>Vos Opportunités personnalisées</h1>
-    <p>Découvrez les offres qui vous correspondent le mieux.</p>
-  </header>
+<mat-sidenav-container class="ticket-candidat-container">
+  <!-- Sidebar -->
+  <mat-sidenav mode="side" opened>
+    <app-sidebar-nav [userType]="'candidat'"></app-sidebar-nav>
+  </mat-sidenav>
 
-  <div class="filters">
-    <div class="search">
-      <input
-        type="text"
-        placeholder="Rechercher par poste, entreprise, compétences…"
-        [ngModel]="q()"
-        (ngModelChange)="q.set($event)"
-      />
-      <button class="btn primary">Filtres</button>
-    </div>
-
-    <div class="toggles">
-      <label class="switch">
-        <input type="checkbox" [checked]="onlyHighMatch()" (change)="onlyHighMatch.set($event.target.checked)">
-        <span class="slider"></span>
-      </label>
-      <span class="switch-label">Match ≥ 70%</span>
-    </div>
-  </div>
-
-  <div class="selectors">
-    <div class="select">
-      <label>Contrat</label>
-      <select [ngModel]="fContrat()" (ngModelChange)="fContrat.set($event)">
-        <option>Tous</option>
-        <option>CDI</option>
-        <option>CDD</option>
-        <option>Stage</option>
-        <option>Freelance</option>
-      </select>
-    </div>
-    <div class="select">
-      <label>Télétravail</label>
-      <select [ngModel]="fMode()" (ngModelChange)="fMode.set($event)">
-        <option>Tous</option>
-        <option>Hybride</option>
-        <option>Télétravail</option>
-        <option>Full Remote</option>
-        <option>Présentiel</option>
-      </select>
-    </div>
-    <div class="select">
-      <label>Secteur</label>
-      <select [ngModel]="fSecteur()" (ngModelChange)="fSecteur.set($event)">
-        <option>Tous</option>
-        <option>Tech</option>
-        <option>Finance</option>
-        <option>Santé</option>
-        <option>Industriel</option>
-      </select>
-    </div>
-    <div class="range">
-      <label>Salaire (€k)</label>
-      <div class="range-row">
-        <input type="number" placeholder="min" [ngModel]="fSalaireMin()" (ngModelChange)="fSalaireMin.set($event ? +$event : null)">
-        <span>–</span>
-        <input type="number" placeholder="max" [ngModel]="fSalaireMax()" (ngModelChange)="fSalaireMax.set($event ? +$event : null)">
-        <button class="btn ghost" (click)="resetSalaire()">Réinitialiser</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="grid">
-    <div class="cards">
-      <div class="result-meta">
-        <strong>{{ filtered().length }}</strong> offre(s)
-      </div>
-
-      <article class="card" *ngFor="let job of filtered()">
-        <div class="card-header">
-          <div class="avatar">{{ job.company.slice(0,2).toUpperCase() }}</div>
-          <div class="titles">
-            <h3>{{ job.title }}</h3>
-            <div class="meta">
-              <span>{{ job.localisation || job.city }}</span>
-              <span>•</span>
-              <span>{{ job.typeContrat }}</span>
-              <span>•</span>
-              <span>{{ job.mode }}</span>
-            </div>
-          </div>
-          <div class="match" [attr.aria-label]="'Compatibilité ' + job.compatibilite + '%'">
-            <div class="bar">
-              <div class="fill" [style.width.%]="job.compatibilite"></div>
-            </div>
-            <span class="value">{{ job.compatibilite }}%</span>
-          </div>
+  <mat-sidenav-content>
+    <section class="page">
+      <header class="header">
+        <h1>Vos Opportunités personnalisées</h1>
+        <p>Découvrez les offres qui vous correspondent le mieux.</p>
+      </header>
+      
+      <div class="filters">
+        <div class="search">
+          <input type="text" placeholder="Rechercher par poste, entreprise, compétences…" [ngModel]="q()"
+            (ngModelChange)="q.set($event)" />
+          <button class="btn primary">Filtres</button>
         </div>
 
-        <div class="card-body">
-          <div class="row">
-            <div class="block">
-              <label>Salaire</label>
-              <div class="value" *ngIf="job.salaireMinK != null || job.salaireMaxK != null">
-                {{ job.salaireMinK ? job.salaireMinK + 'k' : '?' }} – {{ job.salaireMaxK ? job.salaireMaxK + 'k' : '?' }} €
+        <div class="toggles">
+          <label class="switch">
+            <input type="checkbox" [checked]="onlyHighMatch()" (change)="onlyHighMatch.set($event.target.checked)">
+            <span class="slider"></span>
+          </label>
+          <span class="switch-label">Match ≥ 70%</span>
+        </div>
+      </div>
+
+      <div class="selectors">
+        <div class="select">
+          <label>Contrat</label>
+          <select [ngModel]="fContrat()" (ngModelChange)="fContrat.set($event)">
+            <option>Tous</option>
+            <option>CDI</option>
+            <option>CDD</option>
+            <option>Stage</option>
+            <option>Freelance</option>
+          </select>
+        </div>
+        <div class="select">
+          <label>Télétravail</label>
+          <select [ngModel]="fMode()" (ngModelChange)="fMode.set($event)">
+            <option>Tous</option>
+            <option>Hybride</option>
+            <option>Télétravail</option>
+            <option>Full Remote</option>
+            <option>Présentiel</option>
+          </select>
+        </div>
+        <div class="select">
+          <label>Secteur</label>
+          <select [ngModel]="fSecteur()" (ngModelChange)="fSecteur.set($event)">
+            <option>Tous</option>
+            <option>Tech</option>
+            <option>Finance</option>
+            <option>Santé</option>
+            <option>Industriel</option>
+          </select>
+        </div>
+        <div class="range">
+          <label>Salaire (€k)</label>
+          <div class="range-row">
+            <input type="number" placeholder="min" [ngModel]="fSalaireMin()"
+              (ngModelChange)="fSalaireMin.set($event ? +$event : null)">
+            <span>–</span>
+            <input type="number" placeholder="max" [ngModel]="fSalaireMax()"
+              (ngModelChange)="fSalaireMax.set($event ? +$event : null)">
+            <button class="btn ghost" (click)="resetSalaire()">Réinitialiser</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="cards">
+          <div class="result-meta">
+            <strong>{{ filtered().length }}</strong> offre(s)
+          </div>
+
+          <article class="card" *ngFor="let job of filtered()">
+            <div class="card-header">
+              <div class="avatar">{{ job.company.slice(0,2).toUpperCase() }}</div>
+              <div class="titles">
+                <h3>{{ job.title }}</h3>
+                <div class="meta">
+                  <span>{{ job.localisation || job.city }}</span>
+                  <span>•</span>
+                  <span>{{ job.typeContrat }}</span>
+                  <span>•</span>
+                  <span>{{ job.mode }}</span>
+                </div>
               </div>
-              <div class="value" *ngIf="job.salaireMinK == null && job.salaireMaxK == null">
-                {{ job.salaireRangeRaw || 'Non renseigné' }}
+              <div class="match" [attr.aria-label]="'Compatibilité ' + job.compatibilite + '%'">
+                <div class="bar">
+                  <div class="fill" [style.width.%]="job.compatibilite"></div>
+                </div>
+                <span class="value">{{ job.compatibilite }}%</span>
               </div>
             </div>
 
-            <div class="block">
-              <label>Domaine</label>
-              <div class="value">{{ job.domaine || '—' }}</div>
-            </div>
-          </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="block">
+                  <label>Salaire</label>
+                  <div class="value" *ngIf="job.salaireMinK != null || job.salaireMaxK != null">
+                    {{ job.salaireMinK ? job.salaireMinK + 'k' : '?' }} – {{ job.salaireMaxK ? job.salaireMaxK + 'k' : '?' }} €
+                  </div>
+                  <div class="value" *ngIf="job.salaireMinK == null && job.salaireMaxK == null">
+                    {{ job.salaireRangeRaw || 'Non renseigné' }}
+                  </div>
+                </div>
 
-          <div class="row" *ngIf="job.descriptionRaw">
-            <div class="block full">
-              <label>Description</label>
-              <div class="value description-preview">{{ job.descriptionRaw | slice:0:220 }}{{ job.descriptionRaw.length > 220 ? '…' : '' }}</div>
+                <div class="block">
+                  <label>Domaine</label>
+                  <div class="value">{{ job.domaine }}</div>
+                </div>
+              </div>
+
+              <div class="row" *ngIf="job.descriptionRaw">
+                <div class="block full">
+                  <label>Description</label>
+                  <div class="value description-preview">
+                    {{ job.descriptionRaw | slice:0:220 }}{{ job.descriptionRaw.length > 220 ? '…' : '' }}
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
+
+            <!-- Bouton pour ouvrir le modal -->
+            <div class="card-actions">
+              <button class="btn outline" (click)="openCandidateModal(job.id)">Voir détails</button>
+            </div>
+          </article>
         </div>
 
-        <div class="card-actions">
-          <a class="btn primary" [routerLink]="['/opportunite', job.id]">Voir détails</a>
-          <button class="btn outline">💬</button>
-        </div>
-      </article>
+        <aside class="side">
+          <div class="panel">
+            <h4>Suggestions IA</h4>
+            <ul class="suggestions">
+              <li>Postes proches de vos compétences clés.</li>
+              <li>Boostez votre compatibilité en ajoutant TypeScript.</li>
+              <li>Formation rapide: GraphQL en 7 jours.</li>
+            </ul>
+            <button class="btn accent full">Activer les recommandations</button>
+          </div>
+        </aside>
+      </div>
+
+      <div class="cta">
+        <h3>Ne laissez pas passer l'opportunité de vos rêves 🚀</h3>
+        <p>Activez les alertes pour être notifié des nouvelles opportunités qui vous correspondent.</p>
+        <label class="switch">
+          <input type="checkbox">
+          <span class="slider"></span>
+        </label>
+        <span class="switch-label">Alertes opportunités</span>
+      </div>
+    </section>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+<!-- Modal en dehors du mat-sidenav-container pour éviter les problèmes de z-index -->
+<div *ngIf="showModal" class="modal-backdrop" (click)="closeModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Détails du Candidat</h2>
+      <button class="close-btn" (click)="closeModal()">&times;</button>
     </div>
 
-    <aside class="side">
-      <div class="panel">
-        <h4>Suggestions IA</h4>
-        <ul class="suggestions">
-          <li>Postes proches de vos compétences clés.</li>
-          <li>Boostez votre compatibilité en ajoutant TypeScript.</li>
-          <li>Formation rapide: GraphQL en 7 jours.</li>
-        </ul>
-        <button class="btn accent full">Activer les recommandations</button>
+    <div class="modal-body">
+      <!-- Loading state -->
+      <div *ngIf="isLoading" class="loading">
+        Chargement des détails...
       </div>
-    </aside>
-  </div>
 
-  <div class="cta">
-    <h3>Ne laissez pas passer l’opportunité de vos rêves 🚀</h3>
-    <p>Activez les alertes pour être notifié des nouvelles opportunités qui vous correspondent.</p>
-    <label class="switch">
-      <input type="checkbox">
-      <span class="slider"></span>
-    </label>
-    <span class="switch-label">Alertes opportunités</span>
+      <!-- Contenu des détails du candidat -->
+      <div *ngIf="!isLoading && candidateDetails" class="candidate-info">
+        <div class="info-section">
+          <h3>Informations principales</h3>
+          <p><strong>Titre :</strong> {{ candidateDetails.title }}</p>
+          <p><strong>Entreprise :</strong> {{ candidateDetails.company }}</p>
+          <p><strong>Statut :</strong> {{ candidateDetails.status }}</p>
+          <p><strong>Type de propriétaire :</strong> {{ candidateDetails.ownerType }}</p>
+        </div>
+
+        <div class="info-section">
+          <h3>Détails de l'offre</h3>
+          <p><strong>Domaine :</strong> {{ candidateDetails.domaine }}</p>
+          <p><strong>Type de contrat :</strong> {{ candidateDetails.typeContrat }}</p>
+          <p><strong>Salaire :</strong> {{ candidateDetails.salaryRange }}</p>
+          <p><strong>Disponibilité :</strong> {{ candidateDetails.availability }}</p>
+          <p><strong>Localisation :</strong> {{ candidateDetails.localisation }}</p>
+        </div>
+
+        
+
+        <div class="info-section" *ngIf="candidateDetails.descriptionRaw">
+          <h3>Description</h3>
+          <p class="description-text">{{ candidateDetails.descriptionRaw }}</p>
+        </div>
+      </div>
+
+      <!-- Error state -->
+      <div *ngIf="!isLoading && !candidateDetails" class="error">
+        Erreur lors du chargement des détails du candidat.
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn secondary" (click)="closeModal()">Fermer</button>
+    </div>
   </div>
-</section>
+</div>
