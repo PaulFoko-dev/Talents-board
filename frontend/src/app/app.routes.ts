@@ -2,6 +2,7 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './View/home/home.component';
 import { ProfileComponent } from './View/profile/profile.component';
+import { ProfilEntreprise } from './features/profil-entreprise/profil-entreprise';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { Connexion } from './connexion/connexion';
@@ -12,10 +13,11 @@ import { TicketCreation } from './View/ticketCandidat/ticketCreation/ticketCreat
 import { TicketCandidat } from './View/ticketCandidat/ticketCandidat';
 
 export const routes: Routes = [
-  // Route racine vers la page d'accueil
+  // Route racine vers la page d accueil
   { path: '', component: HomeComponent, pathMatch: 'full' },
   { path : 'profil', component: ProfileComponent},
-  // Alias explicite vers la page d'accueil
+  { path: 'profil-entreprise', component: ProfilEntreprise},
+  // Alias explicite vers la page d accueil
   { path: 'home', component: HomeComponent },
   { path: 'inscription', component: Inscription },
   { path: 'connexion', component: Connexion },
