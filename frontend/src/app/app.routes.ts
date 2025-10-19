@@ -2,6 +2,7 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './View/home/home.component';
 import { ProfileComponent } from './View/profile/profile.component';
+import { ProfilEntreprise } from './features/profil-entreprise/profil-entreprise';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { Connexion } from './connexion/connexion';
@@ -15,6 +16,7 @@ export const routes: Routes = [
   // Route racine vers la page d accueil
   { path: '', component: HomeComponent, pathMatch: 'full' },
   { path : 'profil', component: ProfileComponent},
+  { path: 'profil-entreprise', component: ProfilEntreprise},
   // Alias explicite vers la page d accueil
   { path: 'home', component: HomeComponent },
   { path: 'inscription', component: Inscription },

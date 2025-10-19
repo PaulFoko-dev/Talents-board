@@ -16,7 +16,7 @@ export class SidebarNav {
   @Input() userType: 'entreprise' | 'candidat' = 'entreprise'; // ✅ Input maintenant reconnu
   items = [
     { icon: 'person', label: 'Profil', route: '/profil/entreprise' },
-    { icon: 'receipt', label: 'Tickets de besoin' },
+    { icon: 'receipt', label: 'Tickets de besoin' , route: '/dashboardEntreprise'},
     { icon: 'group', label: 'Talents disponibles' },
     { icon: 'send', label: 'Candidatures reçues' },
     { icon: 'notifications', label: 'Notifications', badge: 5 }
