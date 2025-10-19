@@ -4,6 +4,9 @@ import { Router } from '@angular/router';
 import { of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { TicketService } from '../../services/ticket.service';
+import { MatSidenavModule } from '@angular/material/sidenav';
+// Import du SidebarNav
+import { SidebarNav } from '../../components/sidebar-nav/sidebar-nav';
 
 // On définit une interface pour typer nos données, c'est une bonne pratique
 export interface Ticket {
@@ -19,7 +22,7 @@ export interface Ticket {
 @Component({
   selector: 'app-ticket-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, SidebarNav, MatSidenavModule],
   templateUrl: './ticketCandidat.html',
   styleUrls: ['./ticketCandidat.scss']
 })
