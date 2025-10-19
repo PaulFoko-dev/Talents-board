@@ -48,7 +48,7 @@ export class Connexion {
         if(this.userType === 'candidat') {
           this.router.navigate(['/ticketCandidat']);
         } else {
-          this.router.navigate(['/'])
+          this.router.navigate(['/dashboardEntreprise']);
         }
         
       } else {
