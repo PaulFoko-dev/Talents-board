@@ -21,8 +21,8 @@ export class Connexion {
     motDePasse: ''
   };
 
-  
-  constructor(private router: Router, private authService: AuthService) {}
+
+  constructor(private router: Router, private authService: AuthService) { }
 
   setUserType(type: 'candidat' | 'entreprise'): void {
     this.userType = type;
@@ -42,15 +42,29 @@ export class Connexion {
 
       console.log('Réponse du backend:', res);
 
+      console.log('Type utilisateur:', res.data.nom + ' ' + res.data.prenom, res.data.typeUser);
       if (res.status === 200) {
         localStorage.setItem('token', res.data.token);
         localStorage.setItem('userId', res.data.userId);
-        if(this.userType === 'candidat') {
+        localStorage.setItem('userType', res.data.typeUser);
+
+        try {
+          const userProfile = await this.authService.getUserProfile(res.data.userId);
+          const Username = await this.authService.getUserFullName(res.data.userId);
+          localStorage.setItem('username', Username);
+          console.log('Profil utilisateur', userProfile);
+        } catch (profileError) {
+          console.warn('Impossible de récupérer le profil');
+        }
+
+        if (res.data.typeUser === 'CANDIDAT') {
           this.router.navigate(['/ticketCandidat']);
         } else {
-          this.router.navigate(['/dashboardEntreprise']);
+          if (res.data.typeUser === 'ENTREPRISE') {
+            this.router.navigate(['/dashboardEntreprise']);
+          }
         }
-        
+
       } else {
         alert(res.message || 'Erreur de connexion');
       }

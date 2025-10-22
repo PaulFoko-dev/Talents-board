@@ -1,145 +1,223 @@
-<mat-sidenav-container class="company-profile-container">
-  <mat-sidenav mode="side" opened>
-    <!-- Assurez-vous que le sélecteur correspond à votre composant sidebar -->
-    <app-sidebar-nav [userType]="'entreprise'"></app-sidebar-nav>
-  </mat-sidenav>
-  
+<mat-sidenav-container class="company-profile-container">  
   <mat-sidenav-content>
     <div class="profile-content">
       <!-- En-tête de la page -->
       <div class="page-header">
-        <h1>Profil de l'entreprise</h1>
-        <button mat-stroked-button color="primary" (click)="editProfile()" class="edit-button">
-          <mat-icon>edit</mat-icon>
-          Éditer le profil
-        </button>
+        <div class="header-content">
+          <div class="header-text">
+            <h1>Profil Entreprise</h1>
+            <p class="header-subtitle">Gérez les informations de votre entreprise</p>
+          </div>
+          <button mat-flat-button color="primary" (click)="editProfile()" class="edit-button" [class.editing]="!isReadonly">
+            <mat-icon>{{ isReadonly ? 'edit' : 'close' }}</mat-icon>
+            {{ isReadonly ? 'Modifier le profil' : 'Annuler' }}
+          </button>
+        </div>
       </div>
 
       <!-- Loading state -->
       <div *ngIf="isLoading" class="loading-container">
-        <mat-spinner diameter="50"></mat-spinner>
-        <p>Chargement du profil...</p>
+        <div class="loading-spinner">
+          <mat-spinner diameter="60"></mat-spinner>
+        </div>
+        <h3>Chargement du profil</h3>
+        <p>Nous préparons vos informations...</p>
       </div>
 
       <!-- Error state -->
       <div *ngIf="error && !isLoading" class="error-container">
-        <mat-icon color="warn" class="error-icon">error_outline</mat-icon>
-        <h3>Erreur de chargement</h3>
+        <div class="error-icon">
+          <mat-icon>error_outline</mat-icon>
+        </div>
+        <h3>Oups ! Une erreur est survenue</h3>
         <p>{{ error }}</p>
-        <button mat-raised-button color="primary" (click)="loadCompanyProfile()">
+        <button mat-flat-button color="primary" (click)="loadCompanyProfile()" class="retry-button">
           <mat-icon>refresh</mat-icon>
           Réessayer
         </button>
       </div>
 
       <!-- Profile content -->
-      <div *ngIf="!isLoading && !error" class="profile-grid" >
-        <!-- Carte principale du profil -->
-        <mat-card class="profile-card">
-          <mat-card-header>
-            <div class="logo-container">
-              <img src="assets/image/TalentsBoard.png" alt="Logo entreprise" class="company-logo" (error)="onImageError($event)">
-            </div>
-            <mat-card-title class="company-name">{{ company.nom }}</mat-card-title>
-            @if(company.secteur) {
-              <mat-card-subtitle>{{ company.secteur }}</mat-card-subtitle>
-            } @else {
-              <mat-card-subtitle>Secteur non renseigné</mat-card-subtitle>
-            }
-          </mat-card-header>
-
-          <mat-card-content>
-            <div class="company-details">
-              <!-- Email -->
-              <div class="detail-item">
-                <mat-icon class="detail-icon">email</mat-icon>
-                <div class="detail-content">
-                  <span class="detail-label">Email</span>
-                  <!-- <span class="detail-value">{{ company.email || 'Non renseigné' }}</span> -->
-                   <input type="
-                    email" 
-                    class="detail-value email-input" 
-                    [value]="company.email || 'Non renseigné'" 
-                    placeholder="Non renseigné" [readonly]="isReadonly"
-                    (change)="company.email = $event.target.value"
-                    >
+      <div *ngIf="!isLoading && !error" class="profile-grid">
+        <!-- Colonne gauche : Informations principales -->
+        <div class="left-column">
+          <!-- Carte profil principal -->
+          <mat-card class="profile-main-card">
+            <div class="card-header">
+              <div class="logo-section">
+                <div class="logo-container">
+                  <!-- <img [src]="company.logo" alt="Logo entreprise" class="company-logo" (error)="onImageError($event)"> -->
+                  <img src="assets/image/TalentsBoard.png" alt="Logo entreprise" class="company-logo" (error)="onImageError($event)">
+                  <div class="logo-overlay" *ngIf="!isReadonly">
+                    <button mat-icon-button color="primary" class="change-logo-btn">
+                      <mat-icon>photo_camera</mat-icon>
+                    </button>
+                  </div>
                 </div>
-              </div>
-              
-              <!-- Téléphone -->
-              <div class="detail-item">
-                <mat-icon class="detail-icon">phone</mat-icon>
-                <div class="detail-content">
-                  <span class="detail-label">Téléphone</span>
-                  <!-- <span class="detail-value">{{ company.numero || 'Non renseigné' }}</span> -->
-                    <input type="
-                      number" 
-                      class="detail-value phone-input" 
-                      [value]="company.numero || 'Non renseigné'" 
-                      placeholder="Non renseigné" [readonly]="isReadonly"
-                      (change)="company.numero = $event.target.value">
-                </div>
-              </div>
-              
-              <!-- Localisation -->
-              <div class="detail-item">
-                <mat-icon class="detail-icon">location_on</mat-icon>
-                <div class="detail-content">
-                  <span class="detail-label">Localisation</span>
-                  <!-- <span class="detail-value">{{ company.localisation || company.address || 'Non renseignée' }}</span> -->
-                    <input type="
-                      text" 
-                      class="detail-value location-input" 
-                      [value]="company.localisation  || 'Non renseignée'" 
-                      placeholder="Non renseignée" [readonly]="isReadonly"
-                      (change)="company.localisation = $event.target.value">
-                </div>
-              </div>
-              
-              <!-- Site web -->
-              <div class="detail-item">
-                <mat-icon class="detail-icon">language</mat-icon>
-                <div class="detail-content">
-                  <span class="detail-label">Site web</span>
-                  <!-- <span class="detail-value">
-                    <a *ngIf="company.siteWeb " 
-                       [href]="getFullUrl(company.siteWeb)" 
-                       target="_blank" 
-                       class="website-link">
-                      {{ company.siteWeb }}
-                    </a>
-                    <span *ngIf="!company.siteWeb">Non renseigné</span>
-                  </span> -->
-                  <input type="
-                    url" 
-                    class="detail-value website-input" 
-                    [value]="company.siteWeb || 'Non renseigné'" 
-                    placeholder="Non renseigné" [readonly]="isReadonly"
-                    (change)="company.siteWeb = $event.target.value">
+                <div class="company-info">
+                  <h2 class="company-name">{{ company.nom || 'Nom de l\'entreprise' }}</h2>
+                  <div class="secteur-badge">
+                    <mat-icon>business</mat-icon>
+                    <span>{{ company.secteur || 'Secteur non renseigné' }}</span>
+                  </div>
                 </div>
               </div>
             </div>
-          </mat-card-content>
-        </mat-card>
 
-        <!-- Carte description -->
-        <mat-card class="description-card" *ngIf="company.description">
-          <mat-card-header>
-            <mat-card-title>
-              <mat-icon>description</mat-icon>
-              Description
-            </mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <p class="description-text">{{ company.description }}</p>
-          </mat-card-content>
-        </mat-card>
-        @if (!isReadonly) {
-          <button mat-raised-button color="primary" class="save-button" type="submit" (click)="updateProfile($event)">
-            <mat-icon>save</mat-icon>
-            Sauvegarder les modifications
-          </button>
-        }
+            <mat-card-content>
+              <div class="contact-details">
+                <!-- Email -->
+                <div class="detail-item" [class.editing]="!isReadonly">
+                  <div class="detail-icon-container">
+                    <mat-icon>email</mat-icon>
+                  </div>
+                  <div class="detail-content">
+                    <label class="detail-label">Email</label>
+                    <div class="input-container">
+                      <input 
+                        type="email" 
+                        class="detail-input" 
+                        [(ngModel)]="company.email"
+                        placeholder="contact@entreprise.com" 
+                        [readonly]="isReadonly"
+                        [class.has-value]="company.email">
+                      <span class="input-placeholder" *ngIf="!company.email && isReadonly">Non renseigné</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Téléphone -->
+                <div class="detail-item" [class.editing]="!isReadonly">
+                  <div class="detail-icon-container">
+                    <mat-icon>phone</mat-icon>
+                  </div>
+                  <div class="detail-content">
+                    <label class="detail-label">Téléphone</label>
+                    <div class="input-container">
+                      <input 
+                        type="tel" 
+                        class="detail-input" 
+                        [(ngModel)]="company.numero"
+                        placeholder="+33 1 23 45 67 89" 
+                        [readonly]="isReadonly"
+                        [class.has-value]="company.numero">
+                      <span class="input-placeholder" *ngIf="!company.numero && isReadonly">Non renseigné</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Localisation -->
+                <div class="detail-item" [class.editing]="!isReadonly">
+                  <div class="detail-icon-container">
+                    <mat-icon>location_on</mat-icon>
+                  </div>
+                  <div class="detail-content">
+                    <label class="detail-label">Localisation</label>
+                    <div class="input-container">
+                      <input 
+                        type="text" 
+                        class="detail-input" 
+                        [(ngModel)]="company.localisation"
+                        placeholder="Paris, France" 
+                        [readonly]="isReadonly"
+                        [class.has-value]="company.localisation">
+                      <span class="input-placeholder" *ngIf="!company.localisation && isReadonly">Non renseigné</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Site web -->
+                <div class="detail-item" [class.editing]="!isReadonly">
+                  <div class="detail-icon-container">
+                    <mat-icon>language</mat-icon>
+                  </div>
+                  <div class="detail-content">
+                    <label class="detail-label">Site web</label>
+                    <div class="input-container">
+                      <input 
+                        type="url" 
+                        class="detail-input" 
+                        [(ngModel)]="company.siteWeb"
+                        placeholder="https://www.entreprise.com" 
+                        [readonly]="isReadonly"
+                        [class.has-value]="company.siteWeb">
+                      <span class="input-placeholder" *ngIf="!company.siteWeb && isReadonly">Non renseigné</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <!-- Bouton de sauvegarde -->
+          <div class="save-section" *ngIf="!isReadonly">
+            <button mat-flat-button color="primary" class="save-button" (click)="updateProfile($event)">
+              <mat-icon>save</mat-icon>
+              Sauvegarder les modifications
+            </button>
+            <p class="save-hint">Tous les changements seront enregistrés</p>
+          </div>
+        </div>
+
+        <!-- Colonne droite : Informations complémentaires -->
+        <div class="right-column">
+          <!-- Carte description -->
+          <mat-card class="description-card">
+            <mat-card-header>
+              <mat-card-title>
+                <div class="card-title">
+                  <mat-icon>description</mat-icon>
+                  <span>Description</span>
+                </div>
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="description-content" [class.editing]="!isReadonly">
+                <textarea 
+                  *ngIf="!isReadonly"
+                  class="description-textarea"
+                  placeholder="Décrivez votre entreprise, sa mission, ses valeurs..."
+                  [(ngModel)]="company.description"
+                  rows="6"></textarea>
+                <p *ngIf="isReadonly" class="description-text">
+                  {{ company.description || 'Aucune description renseignée pour le moment.' }}
+                </p>
+                <div *ngIf="!company.description && isReadonly" class="empty-description">
+                  <mat-icon>info</mat-icon>
+                  <span>Aucune description renseignée</span>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <!-- Carte statistiques -->
+          <mat-card class="stats-card">
+            <mat-card-header>
+              <mat-card-title>
+                <div class="card-title">
+                  <mat-icon>analytics</mat-icon>
+                  <span>Activité</span>
+                </div>
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="stats-grid">
+                <div class="stat-item">
+                  <div class="stat-value">12</div>
+                  <div class="stat-label">Tickets actifs</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-value">45</div>
+                  <div class="stat-label">Candidatures</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-value">8</div>
+                  <div class="stat-label">Matches</div>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
       </div>
     </div>
   </mat-sidenav-content>

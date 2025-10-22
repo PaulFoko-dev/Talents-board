@@ -1,11 +1,72 @@
-<mat-nav-list>
-    <h3>NAVIGATION</h3>
-    <mat-list-item *ngFor="let item of items" [routerLink]="item.route || null">
-      <mat-icon matListIcon>{{ item.icon }}</mat-icon>
-      <span matLine>{{ item.label }}</span>
-      <span *ngIf="item.badge"
-            [matBadge]="item.badge"
-            matBadgeColor="primary"
-            matBadgeOverlap="false"></span>
-    </mat-list-item>
-  </mat-nav-list>
+<!-- sidebar-nav.component.html -->
+<div class="sidebar">
+  <div class="user-profile">
+    <div class="profile-header">
+      <div class="avatar" [class.entreprise]="userType === 'ENTREPRISE'" [class.candidat]="userType === 'CANDIDAT'">
+        <img [src]="userProfile.avatar" [alt]="userProfile.name" class="avatar-img">
+        <div class="user-badge" [class]="userType.toLowerCase()">
+          {{ userType === 'ENTREPRISE' ? '🏢' : '👤' }}
+        </div>
+      </div>
+      <div class="profile-info">
+        <h3 class="user-name">{{ userProfile.name }}</h3>
+        <p class="user-role">{{ userProfile.role }}</p>
+        <span class="user-type" [class]="userType.toLowerCase()">
+          {{ userType === 'ENTREPRISE' ? 'Entreprise' : 'Candidat' }}
+        </span>
+      </div>
+    </div>
+    
+    <mat-nav-list class="sidebar-nav">
+      <!-- Navigation pour Candidat -->
+      <ng-container *ngIf="userType === 'CANDIDAT'">
+        <mat-list-item 
+          *ngFor="let item of candidatItems" 
+          [routerLink]="item.route" 
+          [class.active]="item.isActive"
+          (click)="onItemClick(item)"
+          class="nav-item">
+          
+          <mat-icon matListIcon class="nav-icon">{{ item.icon }}</mat-icon>
+          <span matLine class="nav-label">{{ item.label }}</span>
+          
+          <span *ngIf="item.badge"
+                [matBadge]="item.badge"
+                matBadgeColor="primary"
+                matBadgeOverlap="false"
+                class="nav-badge"></span>
+        </mat-list-item>
+      </ng-container>
+
+      <!-- Navigation pour Entreprise -->
+      <ng-container *ngIf="userType === 'ENTREPRISE'">
+        <mat-list-item 
+          *ngFor="let item of entrepriseItems" 
+          [routerLink]="item.route" 
+          [class.active]="item.isActive"
+          (click)="onItemClick(item)"
+          class="nav-item">
+          
+          <mat-icon matListIcon class="nav-icon">{{ item.icon }}</mat-icon>
+          <span matLine class="nav-label">{{ item.label }}</span>
+          
+          <span *ngIf="item.badge"
+                [matBadge]="item.badge"
+                matBadgeColor="primary"
+                matBadgeOverlap="false"
+                class="nav-badge"></span>
+        </mat-list-item>
+      </ng-container>
+    </mat-nav-list>
+    
+    <div class="sidebar-footer">
+      <button mat-raised-button 
+              color="warn" 
+              class="logout-btn"
+              (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        Déconnexion
+      </button>
+    </div>
+  </div>
+</div>

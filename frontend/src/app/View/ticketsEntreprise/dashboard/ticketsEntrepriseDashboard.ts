@@ -147,7 +147,7 @@ export class EntrepriseDashboardComponent implements OnInit {
 
   // Méthodes utilitaires pour les matches
   formatMatchScore(score: number): string {
-    return `${Math.round(score * 100)}%`;
+    return `${score.toFixed(2)}%`;
   }
 
   getTalentInitials(ownerUid: string): string {

@@ -27,5 +27,9 @@ export const routes: Routes = [
   { path: 'footer', component: FooterComponent },
   { path: 'ticketCreation', component: TicketCreation},
   { path: 'ticketCandidat', component: TicketCandidat },
-  { path: 'dashboardEntreprise', component: EntrepriseDashboardComponent}
+  { path: 'dashboardEntreprise', component: EntrepriseDashboardComponent},
+
+  
+  // Redirection par défaut
+  { path: '**', redirectTo: '' }
 ];
