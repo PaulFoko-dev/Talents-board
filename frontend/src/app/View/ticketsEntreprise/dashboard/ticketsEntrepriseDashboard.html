@@ -1,0 +1,437 @@
+<div class="entreprise-dashboard">
+  <!-- Sidebar avec profil utilisateur -->
+  <div class="sidebar">
+    <div class="user-profile">
+      <div class="profile-header">
+        <div class="avatar">
+          <img src="assets/avatar-placeholder.png" alt="Profil" class="avatar-img">
+        </div>
+        <div class="profile-info">
+          <h3 class="user-name">Nom Entreprise</h3>
+          <p class="user-role">Recruteur</p>
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <ul>
+          <li>
+            <a href="#profil" class="nav-link active">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="currentColor">
+                <path d="M9 9a3 3 0 100-6 3 3 0 000 6zM2 16c0-1.1.9-2 2-2h10a2 2 0 012 2v2H2v-2z"/>
+              </svg>
+              Mon Profil
+            </a>
+          </li>
+          <li>
+            <a href="#tableau-de-bord" class="nav-link">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="currentColor">
+                <path d="M1 1h6v6H1V1zm0 8h6v6H1V9zm8-8h6v6H9V1zm0 8h6v6H9V9z"/>
+              </svg>
+              Tableau de bord
+            </a>
+          </li>
+          <li>
+            <a href="#tickets" class="nav-link">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="currentColor">
+                <path d="M2 2h14a1 1 0 011 1v12a1 1 0 01-1 1H2a1 1 0 01-1-1V3a1 1 0 011-1zm1 2v10h12V4H3zm2 2h8v2H5V6zm0 4h8v2H5v-2z"/>
+              </svg>
+              Mes Tickets
+            </a>
+          </li>
+          <li>
+            <a href="#talents" class="nav-link">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="currentColor">
+                <path d="M9 11c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+              </svg>
+              Talents
+            </a>
+          </li>
+          <li>
+            <a href="#messages" class="nav-link">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="currentColor">
+                <path d="M16 2H2c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h4v2l3-3h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+              </svg>
+              Messages
+            </a>
+          </li>
+          <li>
+            <a href="#parametres" class="nav-link">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="currentColor">
+                <path d="M15.95 10.78c.03-.25.05-.51.05-.78s-.02-.53-.06-.78l1.23-1a.47.47 0 00.12-.61l-1.15-2a.46.46 0 00-.57-.21l-1.43.57c-.31-.24-.64-.44-1-.61l-.22-1.52a.48.48 0 00-.48-.4H9.17a.48.48 0 00-.48.4l-.22 1.52c-.36.17-.69.37-1 .61l-1.43-.57a.46.46 0 00-.57.21l-1.15 2a.47.47 0 00.12.61l1.23 1c-.04.25-.07.52-.07.78s.02.53.06.78l-1.23 1a.47.47 0 00-.12.61l1.15 2a.46.46 0 00.57.21l1.43-.57c.31.24.64.44 1 .61l.22 1.52a.48.48 0 00.48.4h2.3c.24 0 .44-.17.48-.4l.22-1.52c.36-.17.69-.37 1-.61l1.43.57c.2.08.42 0 .57-.21l1.15-2a.47.47 0 00-.12-.61l-1.23-1zM9 12c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/>
+              </svg>
+              Paramètres
+            </a>
+          </li>
+        </ul>
+      </nav>
+      
+      <div class="sidebar-footer">
+        <button class="logout-btn">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="currentColor">
+            <path d="M7 2a1 1 0 00-1 1v12a1 1 0 001 1h4a1 1 0 001-1v-1h2v1a3 3 0 01-3 3H7a3 3 0 01-3-3V3a3 3 0 013-3h4a3 3 0 013 3v1h-2V3a1 1 0 00-1-1H7zm8 5l3 3-3 3v-2H7V9h8V7z"/>
+          </svg>
+          Déconnexion
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenu principal -->
+  <div class="main-content">
+    <!-- Header avec bouton d'ajout -->
+    <header class="dashboard-header">
+      <div class="header-content">
+        <h1>Entreprise</h1>
+        <button class="add-ticket-btn" (click)="openTicketModal()">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M8 1a1 1 0 00-1 1v5H2a1 1 0 100 2h5v5a1 1 0 102 0V9h5a1 1 0 100-2H9V2a1 1 0 00-1-1z"/>
+          </svg>
+          Nouveau Ticket
+        </button>
+      </div>
+    </header>
+
+    <!-- Modal de création de ticket -->
+    <div *ngIf="showTicketModal" class="modal-overlay">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Créer un nouveau ticket</h2>
+          <button class="close-btn" (click)="closeTicketModal()">×</button>
+        </div>
+        
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="ticketDescription">Description du besoin *</label>
+            <textarea 
+              id="ticketDescription"
+              [(ngModel)]="newTicketDescription"
+              (input)="onDescriptionInput($event)"
+              placeholder="Décrivez le poste que vous souhaitez pourvoir, les compétences requises, le niveau d'expérience, etc."
+              class="description-textarea"
+              rows="6"
+              [disabled]="creatingTicket"
+              maxlength="500">
+            </textarea>
+            <div class="character-count" [class.warning]="newTicketDescription.length > 400">
+              {{ newTicketDescription.length }}/500 caractères
+            </div>
+          </div>
+          
+          <!-- Message de succès -->
+          <div *ngIf="ticketSuccess" class="success-message">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+            </svg>
+            Ticket créé avec succès !
+          </div>
+          
+          <!-- Message d'erreur -->
+          <div *ngIf="ticketError && !ticketSuccess" class="error-message">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+            </svg>
+            {{ ticketError }}
+          </div>
+        </div>
+        
+        <div class="modal-footer">
+          <button 
+            class="cancel-btn" 
+            (click)="closeTicketModal()"
+            [disabled]="creatingTicket">
+            Annuler
+          </button>
+          <button 
+            class="create-btn" 
+            (click)="createTicket()"
+            [disabled]="creatingTicket || !newTicketDescription.trim() || newTicketDescription.length > 500">
+            <span *ngIf="creatingTicket" class="loading-spinner"></span>
+            {{ creatingTicket ? 'Création en cours...' : 'Créer le ticket' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal des Matches - AJOUT DU MODAL DES MATCHES -->
+    <div *ngIf="showMatchesModal" class="modal-overlay" (click)="closeMatchesModal()">
+      <div class="modal-content matches-modal" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h2>Matches pour "{{ selectedTicketTitle || 'Ticket' }}"</h2>
+          <button class="close-btn" (click)="closeMatchesModal()">×</button>
+        </div>
+        
+        <div class="modal-body">
+          <!-- Loading State -->
+          <div *ngIf="matchesLoading" class="loading-state">
+            <div class="spinner"></div>
+            <p>Chargement des matches...</p>
+          </div>
+
+          <!-- Error State -->
+          <div *ngIf="matchesError && !matchesLoading" class="error-state">
+            <p>{{ matchesError }}</p>
+            <button class="retry-btn" (click)="loadTicketMatches(selectedTicketId!)">Réessayer</button>
+          </div>
+
+          <!-- Liste des Matches -->
+          <div *ngIf="!matchesLoading && !matchesError" class="matches-list">
+            <div *ngIf="talentMatches.length === 0" class="no-matches">
+              <div class="no-matches-icon">🔍</div>
+              <h3>Aucun match trouvé</h3>
+              <p>Aucun talent ne correspond actuellement à votre ticket.</p>
+            </div>
+
+            <div *ngFor="let match of talentMatches" class="match-card">
+              <div class="match-header">
+                <div class="talent-identity">
+                  <div class="talent-initials">{{ getTalentInitials(match.ownerUid) }}</div>
+                  <div class="talent-info">
+                    <div class="talent-id">Talent ID: {{ match.ownerUid }}</div>
+                    <div class="match-score">Correspondance: {{ formatMatchScore(match.score) }}</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Compétences correspondantes -->
+              <div *ngIf="match.matchedSkills && match.matchedSkills.length > 0" class="matched-skills-section">
+                <h4>Compétences correspondantes ({{ match.matchedSkills.length }}) :</h4>
+                <div class="skills-list">
+                  <span *ngFor="let skill of match.matchedSkills" class="skill-tag matched">
+                    {{ skill }}
+                  </span>
+                </div>
+              </div>
+
+              <div *ngIf="!match.matchedSkills || match.matchedSkills.length === 0" class="no-matched-skills">
+                <p class="no-skills-message">Aucune compétence spécifique correspondante</p>
+              </div>
+
+              <div class="match-actions">
+                <button class="action-btn contact-btn" (click)="contactTalent(match.ownerUid)">
+                  Contacter
+                </button>
+                <button class="action-btn profile-btn" (click)="viewTalentProfile(match.ownerUid)">
+                  Voir profil
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="modal-footer">
+          <div class="matches-summary">
+            <span class="matches-count">{{ talentMatches.length }} match{{ talentMatches.length > 1 ? 'es' : '' }} trouvé{{ talentMatches.length > 1 ? 's' : '' }}</span>
+          </div>
+          <button class="cancel-btn" (click)="closeMatchesModal()">Fermer</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Profil Section -->
+    <section class="profile-section">
+      <div class="profile-links">
+        <span 
+          class="profile-link" 
+          [class.active]="activeSection === 'tickets'"
+          (click)="setActiveSection('tickets')">
+          Tickets de besoin
+        </span>
+        <span 
+          class="profile-link" 
+          [class.active]="activeSection === 'talents'"
+          (click)="setActiveSection('talents')">
+          Talents disponibles
+        </span>
+        <span 
+          class="profile-link" 
+          [class.active]="activeSection === 'candidatures'"
+          (click)="setActiveSection('candidatures')">
+          Candidatures reçues
+        </span>
+        <span 
+          class="profile-link" 
+          [class.active]="activeSection === 'notifications'"
+          (click)="setActiveSection('notifications')">
+          Notifications
+        </span>
+      </div>
+    </section>
+
+    <div class="separator"></div>
+
+    <!-- Filtres Section -->
+    <section class="filters-section">
+      <div class="filters-header">
+        <h3>Filtres avancés</h3>
+        <button class="reset-btn" (click)="resetFilters()">Réinitialiser</button>
+      </div>
+      <div class="filters-grid">
+        <div class="filter-group">
+          <label>Poste / Mots-clés</label>
+          <input 
+            type="text" 
+            [value]="filters.poste"
+            (input)="filters.poste = $any($event.target).value"
+            placeholder="Ex: Développeur React"
+            class="filter-input">
+        </div>
+        
+        <div class="filter-group">
+          <label>Niveau d'expérience</label>
+          <select [value]="filters.experience" (change)="filters.experience = $any($event.target).value" class="filter-select">
+            <option>Tous niveaux</option>
+            <option>Junior</option>
+            <option>Confirmé</option>
+            <option>Senior</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label>Type de contrat</label>
+          <select [value]="filters.contrat" (change)="filters.contrat = $any($event.target).value" class="filter-select">
+            <option>Tous types</option>
+            <option>CDI</option>
+            <option>CDD</option>
+            <option>Freelance</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label>Localisation</label>
+          <select [value]="filters.localisation" (change)="filters.localisation = $any($event.target).value" class="filter-select">
+            <option>Toutes localisations</option>
+            <option>Paris</option>
+            <option>Lyon</option>
+            <option>Remote</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <div class="separator"></div>
+
+    <!-- Section des Tickets Existants -->
+    <section class="tickets-section">
+      <div class="section-header">
+        <h2>Mes Tickets</h2>
+        <button class="refresh-btn" (click)="loadTickets()" [disabled]="isLoading">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <path fill-rule="evenodd" d="M8 3a5 5 0 104.546 2.914.75.75 0 011.028-1.094A6.5 6.5 0 118.5 1.5v1.75a.75.75 0 01-1.5 0V1.5A6.5 6.5 0 0114.5 8a6.5 6.5 0 01-1.52 4.184.75.75 0 011.04-1.08A5 5 0 008 3z" clip-rule="evenodd"/>
+          </svg>
+          Actualiser
+        </button>
+      </div>
+
+      <!-- Loading State pour les tickets -->
+      <div *ngIf="isLoading" class="loading-state">
+        <div class="spinner"></div>
+        <p>Chargement de vos tickets...</p>
+      </div>
+
+      <!-- Error State pour les tickets -->
+      <div *ngIf="errorMessage && !isLoading" class="error-state">
+        <p>{{ errorMessage }}</p>
+        <button class="retry-btn" (click)="loadTickets()">Réessayer</button>
+      </div>
+
+      <!-- Liste des Tickets en grille 3 colonnes -->
+      <div *ngIf="!isLoading && !errorMessage" class="tickets-grid-container">
+        <div *ngIf="tickets.length === 0" class="no-tickets">
+          <div class="no-tickets-icon">📋</div>
+          <h3>Aucun ticket créé</h3>
+          <p>Commencez par créer votre premier ticket de besoin</p>
+          <button class="create-first-btn" (click)="openTicketModal()">Créer un ticket</button>
+        </div>
+
+        <div class="tickets-grid">
+          <div *ngFor="let ticket of tickets" class="ticket-card">
+            <div class="ticket-header">
+              <div class="ticket-title-section">
+                <h3 class="ticket-title">{{ ticket.title || 'Sans titre' }}</h3>
+                <div class="ticket-meta">
+                  <span class="ticket-company">{{ ticket.company || 'Entreprise non spécifiée' }}</span>
+                  <span class="ticket-separator">•</span>
+                  <span class="ticket-location">{{ ticket.localisation || 'Localisation non spécifiée' }}</span>
+                </div>
+              </div>
+              <div class="ticket-status">
+                <span class="status-badge" [class]="getStatusClass(ticket.status)">
+                  {{ ticket.status || 'Nouveau' }}
+                </span>
+              </div>
+            </div>
+
+            <div class="ticket-description">
+              <p>{{ (ticket.descriptionRaw || 'Aucune description') | truncate:120 }}</p>
+            </div>
+
+            <div class="ticket-details">
+              <div class="detail-item">
+                <span class="detail-label">Contrat:</span>
+                <span class="detail-value">{{ ticket.typeContrat || 'Non spécifié' }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Expérience:</span>
+                <span class="detail-value">{{ ticket.niveauExperience || 'Non spécifié' }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Salaire:</span>
+                <span class="detail-value">{{ ticket.salaryRange || 'Non spécifié' }}</span>
+              </div>
+            </div>
+
+            <div class="ticket-skills">
+              <span class="skills-label">Compétences requises:</span>
+              <div class="skills-list">
+                <span *ngFor="let competence of ticket.competences?.slice(0, 3) || []" class="skill-tag">
+                  {{ competence }}
+                </span>
+                <span *ngIf="(ticket.competences?.length || 0) > 3" class="skill-more">
+                  +{{ (ticket.competences?.length || 0) - 3 }} autres
+                </span>
+                <span *ngIf="!ticket.competences || ticket.competences.length === 0" class="no-skills">
+                  Aucune compétence
+                </span>
+              </div>
+            </div>
+
+            <div class="ticket-footer">
+              <div class="ticket-actions">
+                <button class="action-btn view-btn" (click)="viewTicketDetails(ticket.id)">
+                  Voir détails
+                </button>
+                <!-- MODIFICATION : ouvre le modal des matches -->
+                <button class="action-btn matches-btn" (click)="openMatchesModal(ticket.id, ticket.title)">
+                  Voir matches
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="separator"></div>
+
+    <!-- IA Matchmaking Section -->
+    <section class="ia-matchmaking">
+      <div class="ia-content">
+        <p><strong>IA Matchmaking</strong></p>
+        <p>Notre IA a analysé vos besoins actifs et trouvé {{ tickets.length }} tickets créés avec vos spécifications.</p>
+        <button class="suggested-profiles-btn" (click)="loadTickets()">
+          Actualiser les tickets
+        </button>
+      </div>
+    </section>
+
+    <div class="separator"></div>
+
+    <!-- Messages Section -->
+    <section class="messages-section">
+      <h3>Messages</h3>
+      <div class="messages-placeholder">
+        Interface messages à implémenter
+      </div>
+    </section>
+  </div>
+</div>
