@@ -1,10 +1,14 @@
-
 // Include theming for Angular Material with `mat.theme()`.
 // This Sass mixin will define CSS variables that are used for styling Angular Material
 // components according to the Material 3 design spec.
 // Learn more about theming and how to use it for your application's
 // custom components at https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
+
+// Variables pour la sidebar
+$sidebar-width: 280px;
+$sidebar-bg-color: #2c3e50;
+$main-bg-color: #ffffff;
 
 html {
   @include mat.theme((
@@ -32,147 +36,642 @@ body {
 
   // Reset the user agent margin.
   margin: 0;
+  overflow-x: hidden; // Empêche le scroll horizontal
 }
+
+// =============================================================================
+// LAYOUT AVEC SIDEBAR
+// =============================================================================
+
+// Layout pour les pages sans sidebar (home, connexion, inscription)
+.home-layout {
+  min-height: 100vh;
+  width: 100%;
+  
+  // S'assurer que le contenu prend toute la largeur
+  router-outlet + * {
+    width: 100%;
+  }
+}
+
+// Layout pour les pages avec sidebar
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  
+  // Sidebar - styles forcés
+  app-sidebar-nav {
+    width: $sidebar-width !important;
+    min-width: $sidebar-width !important;
+    max-width: $sidebar-width !important;
+    background: $sidebar-bg-color;
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 1000;
+    flex-shrink: 0;
+    display: block !important;
+    
+    // Forcer la largeur interne
+    ::ng-deep {
+      > div {
+        width: 100% !important;
+      }
+      
+      .sidebar {
+        width: 100% !important;
+        height: 100% !important;
+      }
+    }
+  }
+  
+  // Contenu principal
+  .main-content {
+    flex: 1;
+    margin-left: $sidebar-width;
+    min-height: 100vh;
+    background-color: var(--mat-sys-surface);
+    width: calc(100% - #{$sidebar-width});
+    
+    // S'assurer que le contenu remplit l'espace disponible
+    router-outlet + * {
+      width: 100%;
+      min-height: 100vh;
+    }
+  }
+}
+
+// Styles spécifiques pour forcer la largeur de la sidebar
+app-sidebar-nav {
+  width: $sidebar-width !important;
+  min-width: $sidebar-width !important;
+  max-width: $sidebar-width !important;
+  display: block !important;
+  
+  .sidebar {
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
+
+// =============================================================================
+// COMPOSANTS EXISTANTS (adaptés pour le layout avec sidebar)
+// =============================================================================
+
 /*app-features-grid.component.css*/
 .features-section {
-    text-align: center;
-    padding: 40px 20px;
-    background-color: #ffffff;
-    max-width: 1100px;
-    margin: 0 auto;
-  }
+  text-align: center;
+  padding: 40px 20px;
+  background-color: var(--mat-sys-surface);
+  max-width: 1100px;
+  margin: 0 auto;
   
-  h2 {
-    font-size: 28px;
-    margin-bottom: 32px;
-    color: #0b0b0b;
-    font-weight: 700;
+  // Adaptation pour le layout avec sidebar
+  .app-layout & {
+    margin-left: auto;
+    margin-right: auto;
   }
-  
+}
+
+.features-section h2 {
+  font-size: 28px;
+  margin-bottom: 32px;
+  color: var(--mat-sys-on-surface);
+  font-weight: 700;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 1200px) {
   .features-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
+    grid-template-columns: repeat(3, 1fr);
   }
+}
 
-  @media (max-width: 992px) {
-    .features-grid {
-      grid-template-columns: repeat(2, 1fr);
+@media (max-width: 992px) {
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.feature-card {
+  padding: 24px;
+  border-radius: 12px;
+  border: 1px solid var(--mat-sys-outline-variant);
+  background: var(--mat-sys-surface);
+  text-align: left;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(16, 24, 40, 0.1);
+  }
+}
+
+.feature-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--mat-sys-primary-container);
+  color: var(--mat-sys-on-primary-container);
+  font-size: 28px;
+  margin-bottom: 14px;
+}
+
+.feature-card h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  color: var(--mat-sys-on-surface);
+}
+
+.feature-card p {
+  font-size: 14px;
+  color: var(--mat-sys-on-surface-variant);
+  margin: 0;
+}
+
+/* How it works section */
+.how-section {
+  background: var(--mat-sys-surface-container);
+  padding: 56px 20px;
+  
+  // Adaptation pour le layout avec sidebar
+  .app-layout & {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+.how-section h2 {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 auto 32px auto;
+  color: var(--mat-sys-on-surface);
+  max-width: 1100px;
+}
+
+.how-grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 992px) {
+  .how-grid { 
+    grid-template-columns: 1fr; 
+  }
+}
+
+.how-card {
+  background: var(--mat-sys-surface);
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 12px;
+  padding: 24px;
+  text-align: left;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(16, 24, 40, 0.1);
+  }
+}
+
+.how-number {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.how-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--mat-sys-primary-container);
+  color: var(--mat-sys-on-primary-container);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  margin-bottom: 12px;
+}
+
+.how-card h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  color: var(--mat-sys-on-surface);
+}
+
+.how-card p {
+  font-size: 14px;
+  color: var(--mat-sys-on-surface-variant);
+  margin: 0;
+}
+
+// =============================================================================
+// RESPONSIVE DESIGN POUR LA SIDEBAR
+// =============================================================================
+
+@media (max-width: 768px) {
+  .app-layout {
+    flex-direction: column;
+    
+    app-sidebar-nav {
+      position: fixed;
+      width: 100% !important;
+      min-width: 100% !important;
+      max-width: 100% !important;
+      height: auto;
+      max-height: 70px;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      z-index: 1001;
+      
+      // Sidebar étendue quand active
+      &.sidebar-open {
+        max-height: 100vh;
+      }
     }
-  }
-
-  @media (max-width: 576px) {
-    .features-grid {
-      grid-template-columns: 1fr;
+    
+    .main-content {
+      margin-left: 0;
+      width: 100%;
+      margin-top: 70px; // Compensation pour la sidebar fixe en mobile
     }
   }
   
-  .feature-card {
-    padding: 24px;
-    border-radius: 12px;
-    border: 1px solid #e9edf3;
-    background: #fff;
-    text-align: left;
-    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+  // Ajustements des composants pour mobile
+  .features-section,
+  .how-section {
+    padding: 30px 15px;
   }
   
-  .feature-icon {
-    width: 56px;
-    height: 56px;
+  .features-grid,
+  .how-grid {
+    gap: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-layout {
+    app-sidebar-nav {
+      max-height: 60px;
+    }
+    
+    .main-content {
+      margin-top: 60px;
+    }
+  }
+  
+  .feature-card,
+  .how-card {
+    padding: 20px;
+  }
+}
+
+// =============================================================================
+// ANIMATIONS ET TRANSITIONS
+// =============================================================================
+
+// Smooth transitions pour les changements de route
+router-outlet + * {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// =============================================================================
+// CORRECTIONS POUR ANGULAR MATERIAL
+// =============================================================================
+
+// Correction pour les overlays modals (doivent être au-dessus de la sidebar)
+.cdk-overlay-container {
+  z-index: 2000;
+}
+
+.mat-mdc-card {
+  margin: 16px;
+}
+
+// =============================================================================
+// STYLES UTILITAIRES
+// =============================================================================
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.hidden {
+  display: none;
+}
+
+// Scrollbar personnalisée
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--mat-sys-surface-container);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--mat-sys-outline);
+  border-radius: 4px;
+  
+  &:hover {
+    background: var(--mat-sys-outline-variant);
+  }
+}
+
+// Variables CSS pour la sidebar
+:root {
+  --sidebar-width: #{$sidebar-width};
+}
+
+// Force les styles pour le composant sidebar
+app-sidebar-nav {
+  --sidebar-width: #{$sidebar-width};
+  
+  &, & > div, & > div.sidebar {
+    width: var(--sidebar-width) !important;
+    min-width: var(--sidebar-width) !important;
+    max-width: var(--sidebar-width) !important;
+  }
+}
+// sidebar-nav.component.scss
+.sidebar {
+  width: 100%;
+  height: 100%;
+  background: #2c3e50;
+  color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.user-profile {
+  padding: 2rem 1.5rem 1rem;
+  border-bottom: 1px solid #34495e;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #3498db;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  border: 3px solid #3498db;
+  
+  &.entreprise {
+    border-color: #e74c3c;
+    background: #e74c3c;
+  }
+  
+  &.candidat {
+    border-color: #2ecc71;
+    background: #2ecc71;
+  }
+  
+  .avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .user-badge {
+    position: absolute;
+    bottom: -5px;
+    right: -5px;
+    background: #34495e;
+    border: 2px solid #2c3e50;
     border-radius: 50%;
+    width: 24px;
+    height: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #e8f1ff;
-    color: #2b79ff;
-    font-size: 28px;
-    margin-bottom: 14px;
+    font-size: 12px;
+    
+    &.entreprise {
+      background: #e74c3c;
+    }
+    
+    &.candidat {
+      background: #2ecc71;
+    }
   }
+}
+
+.profile-info {
+  flex: 1;
   
   h3 {
-    font-size: 18px;
-    font-weight: 700;
-    margin: 0 0 8px 0;
-    color: #111827;
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: white;
+    line-height: 1.3;
   }
   
   p {
-    font-size: 14px;
-    color: #667085;
-    margin: 0;
+    margin: 0.25rem 0 0;
+    color: #bdc3c7;
+    font-size: 0.9rem;
   }
-
-  /* How it works section */
-  .how-section {
-    background: #eef6ff;
-    padding: 56px 20px;
-  }
-
-  .how-section h2 {
-    text-align: center;
-    font-size: 28px;
-    font-weight: 700;
-    margin: 0 auto 32px auto;
-    color: #0b0b0b;
-    max-width: 1100px;
-  }
-
-  .how-grid {
-    max-width: 1100px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-  }
-
-  @media (max-width: 992px) {
-    .how-grid { grid-template-columns: 1fr; }
-  }
-
-  .how-card {
-    background: #ffffff;
-    border: 1px solid #e9edf3;
+  
+  .user-type {
+    display: inline-block;
+    margin-top: 0.5rem;
+    padding: 0.25rem 0.75rem;
     border-radius: 12px;
-    padding: 24px;
-    text-align: left;
-    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    
+    &.entreprise {
+      background: rgba(231, 76, 60, 0.2);
+      color: #e74c3c;
+      border: 1px solid rgba(231, 76, 60, 0.3);
+    }
+    
+    &.candidat {
+      background: rgba(46, 204, 113, 0.2);
+      color: #2ecc71;
+      border: 1px solid rgba(46, 204, 113, 0.3);
+    }
   }
+}
 
-  .how-number {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: #2b79ff;
-    color: #fff;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    margin-bottom: 12px;
+.sidebar-nav {
+  padding: 0;
+  background: transparent;
+  flex: 1;
+  
+  .nav-item {
+    color: #ecf0f1;
+    border-left: 3px solid transparent;
+    transition: all 0.3s ease;
+    margin: 0.25rem 0.5rem;
+    border-radius: 8px;
+    
+    &:hover {
+      background: #34495e !important;
+      color: white;
+    }
+    
+    &.active {
+      background: #3498db !important;
+      color: white;
+      border-left-color: #2980b9;
+      
+      .nav-icon {
+        color: white;
+      }
+    }
+    
+    .mat-mdc-list-item-unscoped-content {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.5rem 0;
+    }
+    
+    .nav-icon {
+      color: #bdc3c7;
+      margin-right: 0;
+      transition: color 0.3s ease;
+    }
+    
+    .nav-label {
+      font-size: 14px;
+      font-weight: 500;
+      flex: 1;
+    }
+    
+    .nav-badge {
+      .mat-badge-content {
+        background: #e74c3c;
+        color: white;
+        font-size: 10px;
+        font-weight: 600;
+      }
+    }
   }
+}
 
-  .how-icon {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background: #e8f1ff;
-    color: #2b79ff;
+.sidebar-footer {
+  padding: 1.5rem;
+  border-top: 1px solid #34495e;
+  
+  .logout-btn {
+    width: 100%;
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-size: 28px;
-    margin-bottom: 12px;
-  }
-
-  .how-card h3 {
-    font-size: 18px;
-    font-weight: 700;
-    margin: 0 0 8px 0;
-    color: #111827;
-  }
-
-  .how-card p {
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
     font-size: 14px;
-    color: #667085;
-    margin: 0;
+    font-weight: 500;
+    
+    &:hover {
+      background: #c0392b;
+    }
+    
+    mat-icon {
+      margin-right: 0;
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
   }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .user-profile {
+    padding: 1.5rem 1rem 1rem;
+  }
+  
+  .profile-header {
+    gap: 0.75rem;
+  }
+  
+  .avatar {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .profile-info {
+    h3 {
+      font-size: 1rem;
+    }
+    
+    p {
+      font-size: 0.8rem;
+    }
+    
+    .user-type {
+      font-size: 0.7rem;
+      padding: 0.2rem 0.5rem;
+    }
+  }
+}

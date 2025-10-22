@@ -1,2 +1,12 @@
+<div *ngIf="isHomePage()" class="home-layout">
+    <router-outlet />
+</div>
 
-<router-outlet />
+<div *ngIf="!isHomePage()" class="app-layout">
+    <div class="sidebar-container">
+    <app-sidebar-nav></app-sidebar-nav>
+    </div>
+    <div class="main-content">
+        <router-outlet />
+    </div>
+</div>

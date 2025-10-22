@@ -141,9 +141,9 @@
 // Contenu principal
 .main-content {
   flex: 1;
-  margin-left: 280px;
+  // margin-left: 280px;
   padding: 24px;
-  width: calc(100% - 280px);
+  width: 100%;
   background-color: #ffffff;
   
   @media (max-width: 768px) {

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -6,13 +6,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { Subscription } from 'rxjs';
+import { FormsModule } from '@angular/forms'; // AJOUT: Pour ngModel
 
 // Import du service - ajustez le chemin selon votre structure
 import { ProfilEntrepriseService, CompanyProfile } from '../../services/profilEntreprise.service';
-
-// Import du SidebarNav - ajustez le chemin
-import { SidebarNav } from '../../components/sidebar-nav/sidebar-nav';
 
 @Component({
   selector: 'app-profil-entreprise',
@@ -24,7 +21,7 @@ import { SidebarNav } from '../../components/sidebar-nav/sidebar-nav';
     MatIconModule, 
     MatProgressSpinnerModule,
     MatSidenavModule,
-    SidebarNav // IMPORTANT : Ajoutez SidebarNav ici
+    FormsModule // AJOUT: Pour ngModel
   ],
   templateUrl: './profil-entreprise.html',
   styleUrls: ['./profil-entreprise.scss']
@@ -41,33 +38,34 @@ export class ProfilEntreprise implements OnInit {
     siteWeb: '',
     email: '',
     numero: '',
-    // contact: {
-    // }
   };
 
   isLoading = true;
   error: string | null = null;
 
+  // AJOUT: Stocker les données originales pour détecter les changements
+  private originalCompanyData: CompanyProfile | null = null;
+
   constructor(
-    private router: Router, // AJOUT: Injection du Router
+    private router: Router,
     private profilEntrepriseService: ProfilEntrepriseService
   ) {}
 
   async ngOnInit(): Promise<void> {
     await this.loadCompanyProfile();
-    
   }
 
- async loadCompanyProfile(): Promise<void> {
+  async loadCompanyProfile(): Promise<void> {
     this.isLoading = true;
     this.error = null;
 
     try {
-     this.profilEntrepriseService.getCompanyProfile().then((data) => {
-      this.company = data;
-      console.log("company: ",this.company);
-      
-     });
+      await this.profilEntrepriseService.getCompanyProfile().then((data) => {
+        this.company = data;
+        // AJOUT: Sauvegarder les données originales
+        this.originalCompanyData = { ...data };
+        console.log("company: ", this.company);
+      });
     } catch (error: any) {
       console.error('Erreur lors du chargement du profil:', error);
       this.error = error.message || 'Erreur lors du chargement du profil';
@@ -82,17 +80,16 @@ export class ProfilEntreprise implements OnInit {
     this.company = {
       id: '1',
       nom: 'Nom de l\'entreprise',
-      logo: '/assets/images/company-logo-placeholder.png',
+      logo: '/assets/images/TalentsBoard.png',
       description: 'Description de l\'entreprise et de ses activités principales.',
       secteur: 'Technologie',
       localisation: 'Paris, France',
       siteWeb: 'https://www.example.com',
-      // contact: {
       email: 'contact@example.com',
       numero: '+33 1 23 45 67 89',
-      // website: 'https://www.example.com'
-      // }
     };
+    // AJOUT: Sauvegarder les données mockées originales
+    this.originalCompanyData = { ...this.company };
     this.isLoading = false;
   }
 
@@ -110,20 +107,43 @@ export class ProfilEntreprise implements OnInit {
   }
 
   editProfile(): void {
-    // this.router.navigate(['/edit-profil-entreprise']);
-    this.isReadonly = false;
-  }  
+    if (this.isReadonly) {
+      // Passer en mode édition
+      this.isReadonly = false;
+      // Sauvegarder l'état original
+      this.originalCompanyData = { ...this.company };
+    } else {
+      // Annuler l'édition et restaurer les données originales
+      this.isReadonly = true;
+      if (this.originalCompanyData) {
+        this.company = { ...this.originalCompanyData };
+      }
+    }
+  }
+
+  // AJOUT: Méthode pour détecter les changements
+  hasChanges(): boolean {
+    if (!this.originalCompanyData) return false;
+    
+    return JSON.stringify(this.company) !== JSON.stringify(this.originalCompanyData);
+  }
+
   updateProfile(event: Event) {
-    // event.preventDefault();
+    event.preventDefault();
     console.log('Updating profile with data:', this.company);
     
     this.profilEntrepriseService.updateCompanyProfile(this.company)
       .then(() => {
         console.log('✅ Profil mis à jour avec succès !');
         this.isReadonly = true;
+        // Mettre à jour les données originales
+        this.originalCompanyData = { ...this.company };
       })
       .catch(error => {
         console.error('❌ Erreur lors de la mise à jour du profil', error);
+        this.error = error.message || 'Erreur lors de la mise à jour du profil';
       });
   }
+
+  // SUPPRIMER: Les méthodes onFieldChange ne sont plus nécessaires avec ngModel
 }

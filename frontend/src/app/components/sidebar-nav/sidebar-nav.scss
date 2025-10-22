@@ -1,3 +1,188 @@
-mat-nav-list { padding: 0; }
-h3 { padding: 10px; font-size: 14px; color: #666; }
-mat-list-item { padding: 10px; }
+// sidebar-nav.component.scss
+.sidebar {
+  width: 280px;
+  background: #2c3e50;
+  color: white;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+  
+  .user-profile {
+    padding: 2rem 1.5rem 1rem;
+    border-bottom: 1px solid #34495e;
+  }
+  
+  .profile-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #3498db;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 2px solid #3498db;
+    
+    .avatar-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+  
+  .profile-info {
+    h3 {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: white;
+    }
+    
+    p {
+      margin: 0.25rem 0 0;
+      color: #bdc3c7;
+      font-size: 0.9rem;
+    }
+  }
+}
+
+.sidebar-nav {
+  padding: 0;
+  background: transparent;
+  
+  .nav-item {
+    color: #ecf0f1;
+    border-left: 3px solid transparent;
+    transition: all 0.3s ease;
+    margin: 0.25rem 0;
+    
+    &:hover {
+      background: #34495e !important;
+      color: white;
+    }
+    
+    &.active {
+      background: #3498db !important;
+      color: white;
+      border-left-color: #2980b9;
+      
+      .nav-icon {
+        color: white;
+      }
+    }
+    
+    .mat-mdc-list-item-unscoped-content {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    
+    .nav-icon {
+      color: #bdc3c7;
+      margin-right: 0;
+      transition: color 0.3s ease;
+    }
+    
+    .nav-label {
+      font-size: 14px;
+      font-weight: 500;
+      flex: 1;
+    }
+    
+    .nav-badge {
+      .mat-badge-content {
+        background: #e74c3c;
+        color: white;
+        font-size: 10px;
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+.sidebar-footer {
+  padding: 1.5rem;
+  border-top: 1px solid #34495e;
+  margin-top: auto;
+  
+  .logout-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    font-size: 14px;
+    font-weight: 500;
+    
+    &:hover {
+      background: #c0392b;
+    }
+    
+    mat-icon {
+      margin-right: 0;
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+}
+
+// Styles pour Material list
+.mat-mdc-list-base {
+  --mdc-list-list-item-label-text-color: #ecf0f1;
+  --mdc-list-list-item-hover-label-text-color: white;
+  --mdc-list-list-item-focus-label-text-color: white;
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    
+    &.open {
+      transform: translateX(0);
+    }
+  }
+}
+
+// Animation pour les items
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.nav-item {
+  animation: slideIn 0.3s ease-out;
+  
+  @for $i from 1 through 10 {
+    &:nth-child(#{$i}) {
+      animation-delay: #{$i * 0.05}s;
+    }
+  }
+}
