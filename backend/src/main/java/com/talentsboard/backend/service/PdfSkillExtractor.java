@@ -39,8 +39,8 @@ PdfSkillExtractor {
             // ... (Logique d'extraction Tika inchangée) ...
             AutoDetectParser parser = new AutoDetectParser();
             PDFParserConfig pdfConfig = new PDFParserConfig();
-            pdfConfig.setExtractInlineImages(true);
-            pdfConfig.setExtractUniqueInlineImagesOnly(false);
+            pdfConfig.setExtractInlineImages(false);
+            pdfConfig.setExtractUniqueInlineImagesOnly(true);
 
             ParseContext context = new ParseContext();
             context.set(PDFParserConfig.class, pdfConfig);

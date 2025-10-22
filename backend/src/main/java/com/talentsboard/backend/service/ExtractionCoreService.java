@@ -102,7 +102,7 @@ public class ExtractionCoreService {
             String key = entry.getKey().toLowerCase(Locale.ROOT);
             // Utiliser Pattern pour garantir la limite du mot (word boundary) pour les termes courts
             // et une simple vérification contains pour les termes longs (qui sont plus uniques).
-            if (key.length() < 5) {
+            if (key.length() <= 3) {
                 Pattern wordPat = Pattern.compile("\\b" + Pattern.quote(key) + "\\b", Pattern.UNICODE_CHARACTER_CLASS);
                 if (wordPat.matcher(lower).find()) {
                     found.add(entry.getValue());
