@@ -44,6 +44,7 @@ public final class UserMapper {
         if (request.getEmail() != null) entity.setEmail(request.getEmail());
         if (request.getDescription() != null) entity.setDescription(request.getDescription());
         if (request.getPrenom() != null) entity.setPrenom(request.getPrenom());
+        if (request.getNumero() !=null) entity.setNumero(request.getNumero());
         if (request.getCompetences() != null) entity.setCompetences(request.getCompetences());
         if (request.getCv() != null) entity.setCv(request.getCv());
         if (request.getPhotoProfil() != null) entity.setPhotoProfil(request.getPhotoProfil());

@@ -3,6 +3,9 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormArray, Abs
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { TicketService } from '../../../services/ticket.service';
+import { MatSidenavModule } from '@angular/material/sidenav';
+// Import du SidebarNav
+import { SidebarNav } from '../../../components/sidebar-nav/sidebar-nav';
 
 export function fileTypeValidator(type: string): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -19,7 +22,7 @@ export function fileTypeValidator(type: string): ValidatorFn {
 @Component({
   selector: 'app-ticket-creation',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule,SidebarNav,MatSidenavModule],
   templateUrl: './ticketCreation.html',
   styleUrls: ['./ticketCreation.scss']
 })

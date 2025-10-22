@@ -32,4 +32,5 @@ export const routes: Routes = [
   
   // Redirection par défaut
   { path: '**', redirectTo: '' }
+  { path: 'opportunite', component: OpportuniteComponent}
 ];

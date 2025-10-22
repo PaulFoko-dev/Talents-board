@@ -410,3 +410,23 @@ textarea.form-control {
     transform: translateY(0);
   }
 }
+
+.ticket-creation-container {
+  height: 100vh;
+  background: #f5f5f5;
+}
+
+.creation-content {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  
+  
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .creation-content {
+    padding: 1rem;
+  }
+}

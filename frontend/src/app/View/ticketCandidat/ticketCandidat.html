@@ -42,56 +42,69 @@
     </div>
   </div>
 </div> -->
-<!-- ✅ 1. État de chargement -->
-<div *ngIf="isLoading" class="loading-container">
-  <p>Chargement des tickets...</p>
-</div>
+<!-- Ajout de la structure avec sidebar -->
+<mat-sidenav-container class="ticket-candidat-container">
+  <!-- Sidebar -->
+  <mat-sidenav mode="side" opened>
+    <app-sidebar-nav [userType]="'candidat'"></app-sidebar-nav>
+  </mat-sidenav>
 
-<!-- ✅ 2. État d'erreur -->
-<div *ngIf="!isLoading && errorMessage" class="error-container">
-  <p>{{ errorMessage }}</p>
-  <button class="btn-retry" (click)="loadTickets()">🔄 Réessayer</button>
-</div>
-
-<!-- ✅ 3. État vide -->
-<div *ngIf="!isLoading && !errorMessage && tickets.length === 0" class="empty-state-container">
-  <div class="content-wrapper">
-    <h1>
-      Mes tickets <span class="ticket-icon" aria-hidden="true">🎫</span>
-    </h1>
-    <p class="subtitle">
-      Aucun ticket trouvé pour le moment.<br />
-      Créez, gérez et suivez vos demandes d'opportunités professionnelles.
-    </p>
-    <button class="btn-create-ticket" (click)="creerNouveauTicket()">
-      <span class="plus-icon">+</span> Créer un nouveau ticket
-    </button>
-  </div>
-</div>
-
-<!-- ✅ 4. Liste des tickets -->
-<div *ngIf="!isLoading && !errorMessage && tickets.length > 0" class="list-container">
-  <header class="list-header">
-    <h2>Mes tickets</h2>
-    <button class="btn-create-ticket-small" (click)="creerNouveauTicket()">
-      + Ajouter un ticket
-    </button>
-  </header>
-
-  <div class="tickets-grid">
-    <div *ngFor="let ticket of tickets" class="ticket-card">
-      <div class="ticket-card-header">
-        <h3>{{ ticket.title }}</h3>
-        <span class="ticket-status">{{ ticket.status || 'Actif' }}</span>
+  <!-- Contenu principal -->
+  <mat-sidenav-content>
+    <div class="ticket-content">
+      <!-- ✅ 1. État de chargement -->
+      <div *ngIf="isLoading" class="loading-container">
+        <p>Chargement des tickets...</p>
       </div>
-      <div class="ticket-card-body">
-        <p><strong>Domaine :</strong> {{ ticket.domaine || 'Non spécifié' }}</p>
-        <p><strong>Localisation :</strong> {{ ticket.localisation || 'Non spécifiée' }}</p>
-        <p><strong>Disponibilité :</strong> {{ ticket.availability || 'Non spécifiée' }}</p>
+
+      <!-- ✅ 2. État d'erreur -->
+      <!-- <div *ngIf="!isLoading && errorMessage" class="error-container">
+        <p>{{ errorMessage }}</p>
+        <button class="btn-retry" (click)="loadTickets()">🔄 Réessayer</button>
+      </div> -->
+
+      <!-- ✅ 3. État vide -->
+      <div *ngIf="!isLoading && tickets.length === 0" class="empty-state-container">
+        <div class="content-wrapper">
+          <h1>
+            Mes tickets <span class="ticket-icon" aria-hidden="true">🎫</span>
+          </h1>
+          <p class="subtitle">
+            Aucun ticket trouvé pour le moment.<br />
+            Créez, gérez et suivez vos demandes d'opportunités professionnelles.
+          </p>
+          <button class="btn-create-ticket" (click)="creerNouveauTicket()">
+            <span class="plus-icon">+</span> Créer un nouveau ticket
+          </button>
+        </div>
       </div>
-      <div class="ticket-card-footer">
-        <button class="btn-details" (click)="voirDetails(ticket.id)">Voir détails</button>
+
+      <!-- ✅ 4. Liste des tickets -->
+      <div *ngIf="!isLoading && !errorMessage && tickets.length > 0" class="list-container">
+        <header class="list-header">
+          <h2>Mes tickets</h2>
+          <button class="btn-create-ticket-small" (click)="creerNouveauTicket()">
+            + Ajouter un ticket
+          </button>
+        </header>
+
+        <div class="tickets-grid">
+          <div *ngFor="let ticket of tickets" class="ticket-card">
+            <div class="ticket-card-header">
+              <h3>{{ ticket.title }}</h3>
+              <span class="ticket-status">{{ ticket.status || 'Actif' }}</span>
+            </div>
+            <div class="ticket-card-body">
+              <p><strong>Domaine :</strong> {{ ticket.domaine || 'Non spécifié' }}</p>
+              <p><strong>Localisation :</strong> {{ ticket.localisation || 'Non spécifiée' }}</p>
+              <p><strong>Disponibilité :</strong> {{ ticket.availability || 'Non spécifiée' }}</p>
+            </div>
+            <div class="ticket-card-footer">
+              <button class="btn-details" (click)="voirDetails(ticket.id)">Voir détails</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

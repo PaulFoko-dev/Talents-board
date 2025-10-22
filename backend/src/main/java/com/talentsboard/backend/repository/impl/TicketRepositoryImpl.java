@@ -47,6 +47,7 @@ public class TicketRepositoryImpl implements TicketRepository {
     public List<Ticket> findAllPublished(int limit, String pageToken) throws ExecutionException, InterruptedException {
         Query q = db().collection(COLLECTION)
                 .whereEqualTo("status", "PUBLISHED")
+                .whereEqualTo("ownerType", "ENTREPRISE")
                 .orderBy("createdAt", Query.Direction.DESCENDING)
                 .limit(limit);
         // pageToken handling omitted for brevity — implement cursor with startAfter if passed
