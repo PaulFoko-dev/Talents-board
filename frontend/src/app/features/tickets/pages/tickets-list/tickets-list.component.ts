@@ -10,96 +10,114 @@ import { AuthService } from '../../../../core/services/auth.service';
   standalone: true,
   imports: [CommonModule, RouterLink, FormsModule],
   template: `
-    <div class="container py-4">
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-          <h2 class="fw-bold mb-1">Tickets</h2>
-          <p class="text-muted mb-0">Découvrez les opportunités disponibles</p>
-        </div>
-        <a routerLink="/tickets/create" class="btn btn-primary">
-          <i class="bi bi-plus-circle me-2"></i>Créer un ticket
-        </a>
-      </div>
+    <div class="tb-page" style="padding-left:1.5rem;padding-right:1.5rem;">
+      <div style="max-width:1200px;margin:0 auto;">
 
-      <!-- Filtres -->
-      <div class="card mb-4 border-0 shadow-sm">
-        <div class="card-body">
-          <div class="row g-3 align-items-center">
-            <div class="col-md-4">
-              <input type="text" class="form-control" [(ngModel)]="searchTerm" placeholder="Rechercher...">
+        <!-- Header -->
+        <div class="tb-page-header anim-1">
+          <div>
+            <h1 class="tb-page-title">Tickets</h1>
+            <p class="tb-page-sub">{{ filteredTickets.length }} opportunité{{ filteredTickets.length !== 1 ? 's' : '' }} disponible{{ filteredTickets.length !== 1 ? 's' : '' }}</p>
+          </div>
+          <a routerLink="/tickets/create" class="tb-btn">
+            <i class="bi bi-plus-lg"></i> Créer un ticket
+          </a>
+        </div>
+
+        <!-- Filtres -->
+        <div class="tb-filters anim-2">
+          <div style="position:relative;flex:1;min-width:200px;">
+            <i class="bi bi-search" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text-faint);font-size:0.85rem;"></i>
+            <input class="tb-input" style="padding-left:2.2rem;" type="text"
+                   [(ngModel)]="searchTerm" placeholder="Rechercher un ticket…">
+          </div>
+          <select class="tb-input" style="min-width:180px;flex-shrink:0;" [(ngModel)]="filterType">
+            <option value="">Tous les types</option>
+            <option value="SEARCH_TALENT">Recherche de talent</option>
+            <option value="SEARCH_OPPORTUNITY">Recherche d'opportunité</option>
+          </select>
+          <select class="tb-input" style="min-width:140px;flex-shrink:0;" [(ngModel)]="filterStatus">
+            <option value="">Tous statuts</option>
+            <option value="OPEN">Ouvert</option>
+            <option value="CLOSED">Fermé</option>
+            <option value="MATCHED">Matché</option>
+          </select>
+          <button class="tb-btn-ghost" (click)="resetFilters()" style="flex-shrink:0;">
+            <i class="bi bi-arrow-counterclockwise"></i> Reset
+          </button>
+        </div>
+
+        <!-- Loading -->
+        <div class="tb-loading" *ngIf="loading">
+          <div class="tb-spinner"></div>
+          <span>Chargement des tickets…</span>
+        </div>
+
+        <!-- Grille -->
+        <div *ngIf="!loading" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.25rem;">
+
+          <div class="tb-card anim-3" *ngFor="let ticket of filteredTickets; let i = index"
+               [style.animation-delay]="(i * 0.05) + 's'">
+            <!-- Stripe de couleur en haut -->
+            <div class="tb-ticket-stripe" [class.tb-ticket-stripe-teal]="ticket.type === 'SEARCH_OPPORTUNITY'"></div>
+
+            <div class="tb-card-body">
+              <!-- Badges -->
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:0.85rem;flex-wrap:wrap;">
+                <span class="tb-badge tb-badge-talent" *ngIf="ticket.type === 'SEARCH_TALENT'">
+                  <i class="bi bi-search"></i> Talent
+                </span>
+                <span class="tb-badge tb-badge-opport" *ngIf="ticket.type === 'SEARCH_OPPORTUNITY'">
+                  <i class="bi bi-briefcase"></i> Opportunité
+                </span>
+                <span class="tb-badge tb-badge-open"    *ngIf="ticket.status === 'OPEN'">Ouvert</span>
+                <span class="tb-badge tb-badge-closed"  *ngIf="ticket.status === 'CLOSED'">Fermé</span>
+                <span class="tb-badge tb-badge-matched" *ngIf="ticket.status === 'MATCHED'">Matché</span>
+              </div>
+
+              <!-- Titre -->
+              <h5 style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:0.5rem;color:var(--text);">
+                {{ ticket.title }}
+              </h5>
+
+              <!-- Description -->
+              <p style="color:var(--text-muted);font-size:0.84rem;line-height:1.55;margin-bottom:0.85rem;min-height:40px;">
+                {{ (ticket.description || '') | slice:0:110 }}{{ (ticket.description?.length || 0) > 110 ? '…' : '' }}
+              </p>
+
+              <!-- Localisation -->
+              <div *ngIf="ticket.location" style="display:flex;align-items:center;gap:5px;color:var(--text-faint);font-size:0.78rem;margin-bottom:0.75rem;">
+                <i class="bi bi-geo-alt"></i> {{ ticket.location }}
+              </div>
+
+              <!-- Skills -->
+              <div *ngIf="ticket.skills" style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:0.5rem;">
+                <span class="tb-badge tb-badge-skill" *ngFor="let skill of parseSkills(ticket.skills)">{{ skill }}</span>
+              </div>
             </div>
-            <div class="col-md-3">
-              <select class="form-select" [(ngModel)]="filterType">
-                <option value="">Tous les types</option>
-                <option value="SEARCH_TALENT">Recherche de talent</option>
-                <option value="SEARCH_OPPORTUNITY">Recherche d'opportunité</option>
-              </select>
-            </div>
-            <div class="col-md-3">
-              <select class="form-select" [(ngModel)]="filterStatus">
-                <option value="">Tous les statuts</option>
-                <option value="OPEN">Ouvert</option>
-                <option value="CLOSED">Fermé</option>
-                <option value="MATCHED">Matché</option>
-              </select>
-            </div>
-            <div class="col-md-2">
-              <button class="btn btn-outline-secondary w-100" (click)="resetFilters()">
-                <i class="bi bi-arrow-counterclockwise me-1"></i>Reset
+
+            <div class="tb-card-footer">
+              <span style="font-size:0.78rem;color:var(--text-faint);">
+                <i class="bi bi-person me-1"></i>{{ ticket.ownerName }}
+              </span>
+              <button class="tb-btn tb-btn-sm" (click)="applyToTicket(ticket)"
+                      *ngIf="currentUser?.role === 'CANDIDATE' && ticket.status === 'OPEN'">
+                Postuler <i class="bi bi-arrow-right ms-1"></i>
               </button>
             </div>
           </div>
-        </div>
-      </div>
 
-      <!-- Loading -->
-      <div *ngIf="loading" class="text-center py-5">
-        <div class="spinner-border text-primary"></div>
-      </div>
+          <!-- État vide -->
+          <div class="tb-empty" *ngIf="filteredTickets.length === 0">
+            <i class="bi bi-inbox tb-empty-icon"></i>
+            <span>Aucun ticket ne correspond à vos critères</span>
+            <button class="tb-btn-ghost" (click)="resetFilters()">Réinitialiser les filtres</button>
+          </div>
 
-      <!-- Grille de tickets -->
-      <div *ngIf="!loading" class="row g-4">
-        <div class="col-md-6 col-lg-4" *ngFor="let ticket of filteredTickets">
-          <div class="card h-100 border-0 shadow-sm hover-card">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-start mb-3">
-                <span class="badge" [class.bg-primary]="ticket.type === 'SEARCH_TALENT'" [class.bg-success]="ticket.type === 'SEARCH_OPPORTUNITY'">
-                  {{ ticket.type === 'SEARCH_TALENT' ? 'Recherche Talent' : 'Opportunité' }}
-                </span>
-                <span class="badge" [class.bg-success]="ticket.status === 'OPEN'" [class.bg-secondary]="ticket.status === 'CLOSED'" [class.bg-warning]="ticket.status === 'MATCHED'">
-                  {{ ticket.status }}
-                </span>
-              </div>
-              <h5 class="card-title fw-bold">{{ ticket.title }}</h5>
-              <p class="card-text text-muted small">{{ ticket.description | slice:0:100 }}{{ ticket.description?.length > 100 ? '...' : '' }}</p>
-              <div *ngIf="ticket.location" class="text-muted small mb-2">
-                <i class="bi bi-geo-alt me-1"></i>{{ ticket.location }}
-              </div>
-              <div *ngIf="ticket.skills" class="mb-3">
-                <span *ngFor="let skill of parseSkills(ticket.skills)" class="badge bg-light text-dark border me-1 mb-1">{{ skill }}</span>
-              </div>
-              <div class="d-flex justify-content-between align-items-center">
-                <small class="text-muted">{{ ticket.ownerName }}</small>
-                <button class="btn btn-sm btn-outline-primary" (click)="applyToTicket(ticket)" *ngIf="currentUser?.role === 'CANDIDATE' && ticket.status === 'OPEN'">
-                  Postuler
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-12" *ngIf="filteredTickets.length === 0">
-          <div class="text-center py-5">
-            <i class="bi bi-inbox text-muted" style="font-size: 3rem;"></i>
-            <p class="text-muted mt-3">Aucun ticket trouvé</p>
-          </div>
         </div>
       </div>
     </div>
-  `,
-  styles: [`
-    .hover-card { transition: transform 0.2s, box-shadow 0.2s; }
-    .hover-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important; }
-  `]
+  `
 })
 export class TicketsListComponent implements OnInit {
   tickets: any[] = [];
@@ -126,7 +144,9 @@ export class TicketsListComponent implements OnInit {
 
   get filteredTickets() {
     return this.tickets.filter(t => {
-      const matchSearch = !this.searchTerm || t.title?.toLowerCase().includes(this.searchTerm.toLowerCase()) || t.description?.toLowerCase().includes(this.searchTerm.toLowerCase());
+      const matchSearch = !this.searchTerm ||
+        t.title?.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        t.description?.toLowerCase().includes(this.searchTerm.toLowerCase());
       const matchType = !this.filterType || t.type === this.filterType;
       const matchStatus = !this.filterStatus || t.status === this.filterStatus;
       return matchSearch && matchType && matchStatus;
@@ -151,7 +171,7 @@ export class TicketsListComponent implements OnInit {
       message: 'Candidature spontanée'
     }).subscribe({
       next: () => alert('Candidature envoyée avec succès !'),
-      error: (e: any) => alert('Erreur: ' + (e.error?.message || 'Candidature déjà envoyée'))
+      error: (e: any) => alert('Erreur : ' + (e.error?.message || 'Candidature déjà envoyée'))
     });
   }
 }

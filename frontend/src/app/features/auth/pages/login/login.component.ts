@@ -9,40 +9,73 @@ import { AuthService } from '../../../../core/services/auth.service';
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
   template: `
-    <div class="min-vh-100 d-flex align-items-center bg-light">
-      <div class="container">
-        <div class="row justify-content-center">
-          <div class="col-md-5">
-            <div class="card shadow-lg border-0">
-              <div class="card-body p-5">
-                <div class="text-center mb-4">
-                  <i class="bi bi-briefcase-fill text-primary" style="font-size: 3rem;"></i>
-                  <h2 class="fw-bold mt-2">Talents-Board</h2>
-                  <p class="text-muted">Connectez-vous à votre compte</p>
-                </div>
-                <form (ngSubmit)="onLogin()">
-                  <div class="mb-3">
-                    <label class="form-label fw-semibold">Email</label>
-                    <input type="email" class="form-control" [(ngModel)]="email" name="email" placeholder="votre@email.com" required>
-                  </div>
-                  <div class="mb-4">
-                    <label class="form-label fw-semibold">Mot de passe</label>
-                    <input type="password" class="form-control" [(ngModel)]="password" name="password" placeholder="••••••••" required>
-                  </div>
-                  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
-                  <button type="submit" class="btn btn-primary w-100 py-2" [disabled]="loading">
-                    <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
-                    Se connecter
-                  </button>
-                </form>
-                <hr class="my-4">
-                <p class="text-center mb-0">
-                  Pas encore de compte ?
-                  <a routerLink="/auth/register" class="text-primary fw-semibold">Créer un compte</a>
-                </p>
-              </div>
-            </div>
+    <div class="tb-auth-wrap">
+      <!-- Panneau gauche : brand -->
+      <div class="tb-auth-panel">
+        <div class="tb-auth-blob tb-auth-blob-1"></div>
+        <div class="tb-auth-blob tb-auth-blob-2"></div>
+        <div class="anim-1">
+          <div class="tb-auth-brand">
+            <span style="width:10px;height:10px;background:var(--primary);border-radius:50%;display:inline-block;"></span>
+            Talents-Board
           </div>
+        </div>
+        <div class="tb-auth-tagline anim-2">
+          Connectez les <span>talents</span> aux meilleures <span>opportunités</span>.
+        </div>
+        <div class="tb-auth-features anim-3">
+          <div class="tb-auth-feature">
+            <div class="tb-auth-feature-icon"><i class="bi bi-ticket-perforated-fill"></i></div>
+            <span>Système de tickets bidirectionnel candidats ↔ entreprises</span>
+          </div>
+          <div class="tb-auth-feature">
+            <div class="tb-auth-feature-icon"><i class="bi bi-search-heart"></i></div>
+            <span>Matching précis par compétences et localisation</span>
+          </div>
+          <div class="tb-auth-feature">
+            <div class="tb-auth-feature-icon"><i class="bi bi-bell-fill"></i></div>
+            <span>Notifications en temps réel à chaque interaction</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panneau droit : formulaire -->
+      <div class="tb-auth-form-side">
+        <div class="tb-auth-form-box">
+          <div class="anim-1">
+            <h1 class="tb-auth-title">Bon retour 👋</h1>
+            <p class="tb-auth-sub">Connectez-vous pour accéder à votre espace</p>
+          </div>
+
+          <form (ngSubmit)="onLogin()" class="anim-2">
+            <div class="tb-field">
+              <label class="tb-label">Adresse email</label>
+              <input class="tb-input" type="email" [(ngModel)]="email" name="email"
+                     placeholder="jean.dupont@email.com" required autocomplete="email">
+            </div>
+            <div class="tb-field">
+              <label class="tb-label">Mot de passe</label>
+              <input class="tb-input" type="password" [(ngModel)]="password" name="password"
+                     placeholder="••••••••" required autocomplete="current-password">
+            </div>
+
+            <div class="tb-error" *ngIf="error">
+              <i class="bi bi-exclamation-circle me-2"></i>{{ error }}
+            </div>
+
+            <button type="submit" class="tb-btn tb-btn-full" [disabled]="loading" style="margin-top:0.5rem;">
+              <span *ngIf="loading" class="tb-spinner" style="width:16px;height:16px;border-width:2px;"></span>
+              <span *ngIf="!loading"><i class="bi bi-arrow-right-circle me-1"></i></span>
+              {{ loading ? 'Connexion…' : 'Se connecter' }}
+            </button>
+          </form>
+
+          <div class="tb-auth-divider anim-3">ou</div>
+
+          <p class="tb-auth-switch anim-3">
+            Pas encore de compte ?
+            <a routerLink="/auth/register">Créer un compte</a>
+          </p>
         </div>
       </div>
     </div>
@@ -62,7 +95,7 @@ export class LoginComponent {
     try {
       await this.authService.login(this.email, this.password);
     } catch (e: any) {
-      this.error = 'Email ou mot de passe incorrect';
+      this.error = e.message || 'Email ou mot de passe incorrect';
     } finally {
       this.loading = false;
     }

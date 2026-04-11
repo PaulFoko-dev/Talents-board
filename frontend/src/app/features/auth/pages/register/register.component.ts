@@ -9,69 +9,96 @@ import { AuthService } from '../../../../core/services/auth.service';
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
   template: `
-    <div class="min-vh-100 d-flex align-items-center bg-light">
-      <div class="container">
-        <div class="row justify-content-center">
-          <div class="col-md-6">
-            <div class="card shadow-lg border-0">
-              <div class="card-body p-5">
-                <div class="text-center mb-4">
-                  <i class="bi bi-briefcase-fill text-primary" style="font-size: 3rem;"></i>
-                  <h2 class="fw-bold mt-2">Créer un compte</h2>
-                  <p class="text-muted">Rejoignez la communauté Talents-Board</p>
+    <div class="tb-auth-wrap">
+      <!-- Panneau gauche -->
+      <div class="tb-auth-panel">
+        <div class="tb-auth-blob tb-auth-blob-1"></div>
+        <div class="tb-auth-blob tb-auth-blob-2"></div>
+        <div class="anim-1">
+          <div class="tb-auth-brand">
+            <span style="width:10px;height:10px;background:var(--primary);border-radius:50%;display:inline-block;"></span>
+            Talents-Board
+          </div>
+        </div>
+        <div class="tb-auth-tagline anim-2">
+          Rejoignez une communauté de <span>talents</span> et d'<span>entreprises</span>.
+        </div>
+        <div class="tb-auth-features anim-3">
+          <div class="tb-auth-feature">
+            <div class="tb-auth-feature-icon"><i class="bi bi-person-badge-fill"></i></div>
+            <span>Profil candidat enrichi avec CV et compétences</span>
+          </div>
+          <div class="tb-auth-feature">
+            <div class="tb-auth-feature-icon"><i class="bi bi-building-check"></i></div>
+            <span>Espace entreprise pour gérer vos recrutements</span>
+          </div>
+          <div class="tb-auth-feature">
+            <div class="tb-auth-feature-icon"><i class="bi bi-lightning-charge-fill"></i></div>
+            <span>Accès immédiat dès la création du compte</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panneau droit : formulaire -->
+      <div class="tb-auth-form-side">
+        <div class="tb-auth-form-box">
+          <div class="anim-1">
+            <h1 class="tb-auth-title">Créer un compte</h1>
+            <p class="tb-auth-sub">Rejoignez la plateforme en quelques secondes</p>
+          </div>
+
+          <form (ngSubmit)="onRegister()" class="anim-2">
+            <div class="tb-field">
+              <label class="tb-label">Nom complet</label>
+              <input class="tb-input" type="text" [(ngModel)]="displayName" name="displayName"
+                     placeholder="Jean Dupont" required autocomplete="name">
+            </div>
+            <div class="tb-field">
+              <label class="tb-label">Adresse email</label>
+              <input class="tb-input" type="email" [(ngModel)]="email" name="email"
+                     placeholder="jean.dupont@email.com" required autocomplete="email">
+            </div>
+            <div class="tb-field">
+              <label class="tb-label">Mot de passe</label>
+              <input class="tb-input" type="password" [(ngModel)]="password" name="password"
+                     placeholder="Min. 6 caractères" required autocomplete="new-password">
+            </div>
+
+            <div class="tb-field">
+              <label class="tb-label">Je suis…</label>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+                <div class="tb-role-card" [class.selected]="role === 'CANDIDATE'" (click)="role = 'CANDIDATE'">
+                  <div class="tb-role-icon"><i class="bi bi-person-fill"></i></div>
+                  <div class="tb-role-label">Candidat</div>
                 </div>
-                <form (ngSubmit)="onRegister()">
-                  <div class="mb-3">
-                    <label class="form-label fw-semibold">Nom complet</label>
-                    <input type="text" class="form-control" [(ngModel)]="displayName" name="displayName" placeholder="Jean Dupont" required>
-                  </div>
-                  <div class="mb-3">
-                    <label class="form-label fw-semibold">Email</label>
-                    <input type="email" class="form-control" [(ngModel)]="email" name="email" placeholder="votre@email.com" required>
-                  </div>
-                  <div class="mb-3">
-                    <label class="form-label fw-semibold">Mot de passe</label>
-                    <input type="password" class="form-control" [(ngModel)]="password" name="password" placeholder="Min. 6 caractères" required>
-                  </div>
-                  <div class="mb-3">
-                    <label class="form-label fw-semibold">Je suis...</label>
-                    <div class="row g-2">
-                      <div class="col-6">
-                        <div class="card border-2" [class.border-primary]="role === 'CANDIDATE'" (click)="role = 'CANDIDATE'" style="cursor:pointer">
-                          <div class="card-body text-center py-3">
-                            <i class="bi bi-person-fill fs-2" [class.text-primary]="role === 'CANDIDATE'"></i>
-                            <p class="mb-0 fw-semibold mt-1">Candidat</p>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-6">
-                        <div class="card border-2" [class.border-primary]="role === 'ENTERPRISE'" (click)="role = 'ENTERPRISE'" style="cursor:pointer">
-                          <div class="card-body text-center py-3">
-                            <i class="bi bi-building fs-2" [class.text-primary]="role === 'ENTERPRISE'"></i>
-                            <p class="mb-0 fw-semibold mt-1">Entreprise</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="mb-4" *ngIf="role === 'ENTERPRISE'">
-                    <label class="form-label fw-semibold">Nom de l'entreprise</label>
-                    <input type="text" class="form-control" [(ngModel)]="company" name="company" placeholder="Ma Société SAS">
-                  </div>
-                  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
-                  <button type="submit" class="btn btn-primary w-100 py-2" [disabled]="loading || !role">
-                    <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
-                    Créer mon compte
-                  </button>
-                </form>
-                <hr class="my-4">
-                <p class="text-center mb-0">
-                  Déjà un compte ?
-                  <a routerLink="/auth/login" class="text-primary fw-semibold">Se connecter</a>
-                </p>
+                <div class="tb-role-card" [class.selected]="role === 'ENTERPRISE'" (click)="role = 'ENTERPRISE'">
+                  <div class="tb-role-icon"><i class="bi bi-buildings-fill"></i></div>
+                  <div class="tb-role-label">Entreprise</div>
+                </div>
               </div>
             </div>
-          </div>
+
+            <div class="tb-field" *ngIf="role === 'ENTERPRISE'">
+              <label class="tb-label">Nom de l'entreprise</label>
+              <input class="tb-input" type="text" [(ngModel)]="company" name="company"
+                     placeholder="Ma Société SAS">
+            </div>
+
+            <div class="tb-error" *ngIf="error">
+              <i class="bi bi-exclamation-circle me-2"></i>{{ error }}
+            </div>
+
+            <button type="submit" class="tb-btn tb-btn-full" [disabled]="loading || !role" style="margin-top:0.5rem;">
+              <span *ngIf="loading" class="tb-spinner" style="width:16px;height:16px;border-width:2px;"></span>
+              <span *ngIf="!loading"><i class="bi bi-rocket-takeoff me-1"></i></span>
+              {{ loading ? 'Création…' : 'Créer mon compte' }}
+            </button>
+          </form>
+
+          <div class="tb-auth-divider anim-3">ou</div>
+          <p class="tb-auth-switch anim-3">
+            Déjà un compte ? <a routerLink="/auth/login">Se connecter</a>
+          </p>
         </div>
       </div>
     </div>
@@ -94,7 +121,7 @@ export class RegisterComponent {
     try {
       await this.authService.register(this.email, this.password, this.displayName, this.role, this.company);
     } catch (e: any) {
-      this.error = 'Erreur lors de la création du compte: ' + e.message;
+      this.error = 'Erreur : ' + e.message;
     } finally {
       this.loading = false;
     }

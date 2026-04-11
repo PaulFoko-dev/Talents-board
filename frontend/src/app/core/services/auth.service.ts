@@ -1,62 +1,76 @@
 import { Injectable } from '@angular/core';
-import { Auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, User, onAuthStateChanged } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { ApiService } from './api.service';
 import { BehaviorSubject } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private currentUserSubject = new BehaviorSubject<any>(null);
+  private currentUserSubject = new BehaviorSubject<any>(this.loadFromStorage());
   currentUser$ = this.currentUserSubject.asObservable();
-  private firebaseUser: User | null = null;
 
   constructor(
-    private auth: Auth,
     private router: Router,
     private apiService: ApiService
-  ) {
-    onAuthStateChanged(this.auth, async (user) => {
-      this.firebaseUser = user;
-      if (user) {
-        try {
-          const profile = await this.apiService.getProfile(user.uid).toPromise();
-          this.currentUserSubject.next(profile);
-        } catch {
-          this.currentUserSubject.next({ firebaseUid: user.uid, email: user.email });
-        }
-      } else {
-        this.currentUserSubject.next(null);
-      }
-    });
+  ) {}
+
+  private loadFromStorage(): any {
+    try {
+      const stored = localStorage.getItem('tb_user');
+      return stored ? JSON.parse(stored) : null;
+    } catch {
+      return null;
+    }
+  }
+
+  private saveToStorage(user: any) {
+    if (user) {
+      localStorage.setItem('tb_user', JSON.stringify(user));
+    } else {
+      localStorage.removeItem('tb_user');
+    }
+  }
+
+  /** Identifiant unique démo basé sur l'email */
+  private demoUid(email: string): string {
+    return btoa(email).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
   }
 
   async login(email: string, password: string): Promise<void> {
-    await signInWithEmailAndPassword(this.auth, email, password);
-    this.router.navigate(['/tickets']);
+    // Mode démo : retrouver l'utilisateur par son UID démo dans le backend
+    try {
+      const user = await this.apiService.getProfile(this.demoUid(email)).toPromise();
+      this.currentUserSubject.next(user);
+      this.saveToStorage(user);
+      this.router.navigate(['/tickets']);
+    } catch {
+      throw new Error('Compte introuvable. Veuillez créer un compte.');
+    }
   }
 
   async register(email: string, password: string, displayName: string, role: string, company?: string): Promise<void> {
-    const cred = await createUserWithEmailAndPassword(this.auth, email, password);
-    await this.apiService.registerUser({
-      firebaseUid: cred.user.uid,
+    // Mode démo : créer l'utilisateur directement dans le backend
+    const user = await this.apiService.registerUser({
+      firebaseUid: this.demoUid(email),
       email,
       displayName,
       role,
-      company
+      company: company || null
     }).toPromise();
+
+    this.currentUserSubject.next(user);
+    this.saveToStorage(user);
     this.router.navigate(['/tickets']);
   }
 
   async logout(): Promise<void> {
-    await signOut(this.auth);
     this.currentUserSubject.next(null);
+    this.saveToStorage(null);
     this.router.navigate(['/auth/login']);
   }
 
   async getToken(): Promise<string | null> {
-    if (this.firebaseUser) {
-      return this.firebaseUser.getIdToken();
-    }
+    // En mode démo, pas de token — le backend accepte toutes les requêtes
     return null;
   }
 
