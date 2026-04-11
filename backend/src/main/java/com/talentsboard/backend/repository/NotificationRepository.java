@@ -1,9 +1,13 @@
 package com.talentsboard.backend.repository;
 
-/**
- * NotificationRepository
- * Interface pour accéder aux données notification dans Firestore.
- */
-public interface NotificationRepository {
-    // TODO: Définir les méthodes CRUD avec Firestore
+import com.talentsboard.backend.model.Notification;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import java.util.List;
+
+@Repository
+public interface NotificationRepository extends JpaRepository<Notification, Long> {
+    List<Notification> findByUserId(Long userId);
+    List<Notification> findByUserIdAndIsRead(Long userId, boolean isRead);
+    long countByUserIdAndIsRead(Long userId, boolean isRead);
 }

@@ -1,10 +1,13 @@
 package com.talentsboard.backend.dto;
 
-/**
- * NotificationDTO
- * Objet de transfert pour notification.
- * Sert à communiquer entre frontend et backend.
- */
+import lombok.Data;
+
+@Data
 public class NotificationDTO {
-    // TODO: Définir les champs exposés dans l'API
+    private Long id;
+    private Long userId;
+    private String message;
+    private String type;
+    private boolean isRead;
+    private String createdAt;
 }

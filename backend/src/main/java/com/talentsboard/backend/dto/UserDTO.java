@@ -1,10 +1,31 @@
 package com.talentsboard.backend.dto;
 
-/**
- * UserDTO
- * Objet de transfert pour user.
- * Sert à communiquer entre frontend et backend.
- */
+import com.talentsboard.backend.model.User.UserRole;
+import lombok.Data;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+@Data
 public class UserDTO {
-    // TODO: Définir les champs exposés dans l'API
+    private Long id;
+
+    @NotBlank
+    private String firebaseUid;
+
+    @Email
+    @NotBlank
+    private String email;
+
+    @NotBlank
+    private String displayName;
+
+    @NotNull
+    private UserRole role;
+
+    private String company;
+    private String bio;
+    private String cvUrl;
+    private String skills;
+    private String createdAt;
 }

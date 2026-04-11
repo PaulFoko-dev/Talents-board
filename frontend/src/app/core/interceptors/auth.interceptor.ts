@@ -1,15 +1,22 @@
-import { Injectable } from '@angular/core';
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpInterceptorFn } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { from, switchMap } from 'rxjs';
+import { AuthService } from '../services/auth.service';
 
-/**
- * AuthInterceptor
- * - Ajoute automatiquement le token Firebase aux requêtes HTTP.
- */
-@Injectable()
-export class AuthInterceptor implements HttpInterceptor {
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    // TODO: Récupérer le token depuis AuthService et l'ajouter au header Authorization
-    return next.handle(req);
-  }
-}
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  const authService = inject(AuthService);
+
+  return from(authService.getToken()).pipe(
+    switchMap(token => {
+      if (token) {
+        const cloned = req.clone({
+          setHeaders: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        return next(cloned);
+      }
+      return next(req);
+    })
+  );
+};

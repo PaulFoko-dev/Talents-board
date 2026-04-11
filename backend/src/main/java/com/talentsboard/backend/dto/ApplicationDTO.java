@@ -1,10 +1,21 @@
 package com.talentsboard.backend.dto;
 
-/**
- * ApplicationDTO
- * Objet de transfert pour application.
- * Sert à communiquer entre frontend et backend.
- */
+import com.talentsboard.backend.model.Application.ApplicationStatus;
+import lombok.Data;
+import jakarta.validation.constraints.NotNull;
+
+@Data
 public class ApplicationDTO {
-    // TODO: Définir les champs exposés dans l'API
+    private Long id;
+
+    @NotNull
+    private Long candidateId;
+
+    @NotNull
+    private Long ticketId;
+
+    private String message;
+    private String cvUrl;
+    private ApplicationStatus status;
+    private String createdAt;
 }
