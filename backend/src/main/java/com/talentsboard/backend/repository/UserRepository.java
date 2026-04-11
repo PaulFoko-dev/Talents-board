@@ -1,9 +1,16 @@
 package com.talentsboard.backend.repository;
 
-/**
- * UserRepository
- * Interface pour accéder aux données user dans Firestore.
- */
-public interface UserRepository {
-    // TODO: Définir les méthodes CRUD avec Firestore
+import com.talentsboard.backend.model.User;
+import com.talentsboard.backend.model.User.UserRole;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+public interface UserRepository extends JpaRepository<User, Long> {
+    Optional<User> findByFirebaseUid(String firebaseUid);
+    Optional<User> findByEmail(String email);
+    List<User> findByRole(UserRole role);
+    boolean existsByEmail(String email);
 }
